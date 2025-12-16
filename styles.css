@@ -3381,6 +3381,138 @@ body.dark-mode .file-tag {
     color: #cbd5e1;
 }
 
+/* Drag and Drop Game */
+.game-container {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .game-container {
+    background: #1e293b;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.game-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.game-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    min-height: 400px;
+}
+
+.draggables-container,
+.dropzones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.draggable-item {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    cursor: grab;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    touch-action: none;
+    /* Crucial for mobile drag */
+}
+
+body.dark-mode .draggable-item {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.draggable-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.dropzone {
+    background: #f1f5f9;
+    border: 2px dashed #94a3b8;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+body.dark-mode .dropzone {
+    background: #0f172a;
+    border-color: #475569;
+}
+
+.dropzone.drag-over {
+    background: #e2e8f0;
+    border-color: var(--primary);
+    transform: scale(1.02);
+}
+
+.dropzone.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+    border-style: solid;
+    color: #166534;
+}
+
+body.dark-mode .dropzone.correct {
+    background: #14532d;
+    color: #dcfce7;
+}
+
+.draggable-item.matched {
+    background: #dcfce7;
+    border-color: #22c55e;
+    cursor: default;
+    opacity: 0.5;
+}
+
+.game-message {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    height: 30px;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .game-area {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Mobile Gamification */
 @media (max-width: 600px) {
     .xp-notification {

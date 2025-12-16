@@ -1765,3 +1765,174 @@ function generateWorksheet(type) {
         }
     });
 }
+
+// ===============================
+// DRAG & DROP GAME
+// ===============================
+const GAME_DATA = [
+    { id: 'v-weld', symbol: 'V', text: 'Sudură în V' },
+    { id: 'fillet', symbol: '📐', text: 'Sudură în colț' },
+    { id: 'mask', symbol: '🛡️', text: 'Mască Sudură' },
+    { id: 'gloves', symbol: '🧤', text: 'Mănuși Protecție' }
+];
+
+let gameScore = 0;
+let matchedCount = 0;
+
+function initGame() {
+    const draggablesContainer = document.getElementById('draggables');
+    const dropzonesContainer = document.getElementById('dropzones');
+
+    if (!draggablesContainer || !dropzonesContainer) return;
+
+    draggablesContainer.innerHTML = '';
+    dropzonesContainer.innerHTML = '';
+    gameScore = 0;
+    matchedCount = 0;
+    document.getElementById('gameScore').innerText = '0';
+    document.getElementById('gameMessage').innerText = '';
+
+    // Shuffle data
+    const shuffledItems = [...GAME_DATA].sort(() => Math.random() - 0.5);
+    const shuffledZones = [...GAME_DATA].sort(() => Math.random() - 0.5);
+
+    // Create Draggables
+    shuffledItems.forEach(item => {
+        const el = document.createElement('div');
+        el.classList.add('draggable-item');
+        el.draggable = true;
+        el.dataset.id = item.id;
+        el.innerText = item.symbol;
+        el.id = `drag-${item.id}`;
+
+        el.addEventListener('dragstart', dragStart);
+        // Touch support
+        el.addEventListener('touchstart', touchStart, { passive: false });
+
+        draggablesContainer.appendChild(el);
+    });
+
+    // Create Dropzones
+    shuffledZones.forEach(item => {
+        const el = document.createElement('div');
+        el.classList.add('dropzone');
+        el.dataset.id = item.id;
+        el.innerText = item.text;
+
+        el.addEventListener('dragover', dragOver);
+        el.addEventListener('dragleave', dragLeave);
+        el.addEventListener('drop', drop);
+
+        dropzonesContainer.appendChild(el);
+    });
+}
+
+// Drag Events
+function dragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.dataset.id);
+    e.target.classList.add('dragging');
+}
+
+function dragOver(e) {
+    e.preventDefault();
+    e.target.closest('.dropzone').classList.add('drag-over');
+}
+
+function dragLeave(e) {
+    e.target.closest('.dropzone').classList.remove('drag-over');
+}
+
+function drop(e) {
+    e.preventDefault();
+    const zone = e.target.closest('.dropzone');
+    zone.classList.remove('drag-over');
+
+    const id = e.dataTransfer.getData('text/plain');
+    const draggable = document.querySelector(`.draggable-item[data-id="${id}"]`);
+
+    if (zone.dataset.id === id) {
+        // Match!
+        handleMatch(zone, draggable);
+    } else {
+        draggable.classList.remove('dragging');
+        showMessage('Mai încearcă!', 'error');
+    }
+}
+
+// Touch Handling (Basic)
+let touchedItem = null;
+
+function touchStart(e) {
+    e.preventDefault();
+    touchedItem = e.target;
+    touchedItem.classList.add('dragging');
+
+    // Add touchmove/touchend listeners to window
+    window.addEventListener('touchmove', touchMove, { passive: false });
+    window.addEventListener('touchend', touchEnd);
+}
+
+function touchMove(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    touchedItem.style.position = 'fixed';
+    touchedItem.style.left = touch.clientX - 50 + 'px';
+    touchedItem.style.top = touch.clientY - 50 + 'px';
+    touchedItem.style.zIndex = 1000;
+}
+
+function touchEnd(e) {
+    const touch = e.changedTouches[0];
+    touchedItem.classList.remove('dragging');
+    touchedItem.style.position = '';
+    touchedItem.style.zIndex = '';
+    touchedItem.style.left = '';
+    touchedItem.style.top = '';
+
+    // Check drop target
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const zone = target ? target.closest('.dropzone') : null;
+
+    if (zone && zone.dataset.id === touchedItem.dataset.id) {
+        handleMatch(zone, touchedItem);
+    }
+
+    window.removeEventListener('touchmove', touchMove);
+    window.removeEventListener('touchend', touchEnd);
+    touchedItem = null;
+}
+
+function handleMatch(zone, draggable) {
+    zone.classList.add('correct');
+    draggable.classList.add('matched');
+    draggable.draggable = false;
+
+    gameScore += 25;
+    matchedCount++;
+    document.getElementById('gameScore').innerText = gameScore;
+
+    // XP & Confetti
+    if (typeof addXP === 'function') addXP(25);
+    if (typeof createConfetti === 'function') createConfetti();
+
+    if (matchedCount === GAME_DATA.length) {
+        showMessage('Felicitări! Ai terminat!', 'success');
+        if (typeof celebrateLevelUp === 'function') celebrateLevelUp();
+    }
+}
+
+function showMessage(msg, type) {
+    const el = document.getElementById('gameMessage');
+    if (el) {
+        el.innerText = msg;
+        el.style.color = type === 'success' ? '#22c55e' : '#ef4444';
+        setTimeout(() => el.innerText = '', 2000);
+    }
+}
+
+function resetGame() {
+    initGame();
+}
+
+// Init when section visible or on load
+document.addEventListener('DOMContentLoaded', initGame);
