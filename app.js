@@ -1668,3 +1668,100 @@ function exportPDF() {
         alert('Eroare la exportul PDF. Încearcă din nou.');
     });
 }
+
+// ===============================
+// WORKSHEET GENERATION
+// ===============================
+function generateWorksheet(type) {
+    // Create temporary container
+    const container = document.createElement('div');
+    container.style.padding = '40px';
+    container.style.fontFamily = 'Arial, sans-serif';
+
+    let content = '';
+    let title = '';
+
+    if (type === 'desen') {
+        title = 'Fișă de Lucru - Desen Tehnic';
+        content = `
+            <h2>1. Exercițiu Cotare</h2>
+            <p>Realizați cotarea completă pentru un arbore în trepte cu următoarele dimensiuni:</p>
+            <ul>
+                <li>Lungime totală: 120mm</li>
+                <li>Diametre: Ø20, Ø35, Ø50</li>
+                <li>Lungimi tronsoane: 30mm, 50mm, 40mm</li>
+            </ul>
+            <div style="height: 200px; border: 1px dashed #ccc; margin: 20px 0;">Spatiu pentru schiță</div>
+            
+            <h2>2. Simboluri Rugozitate</h2>
+            <p>Identificați și desenați simbolurile pentru următoarele valori Ra:</p>
+            <ul>
+                <li>Ra 0.8 (Rectificare)</li>
+                <li>Ra 3.2 (Strunjire fină)</li>
+                <li>Ra 12.5 (Degroșare)</li>
+            </ul>
+        `;
+    } else if (type === 'sudura') {
+        title = 'Fișă de Lucru - Procedee Sudare';
+        content = `
+            <h2>1. Clasificare Procedee</h2>
+            <p>Enumerați 3 avantaje și 3 dezavantaje pentru fiecare procedeu:</p>
+            <table style="width:100%; border-collapse: collapse; margin-top: 20px;" border="1">
+                <tr><th style="padding:10px;">Procedeu</th><th style="padding:10px;">Avantaje</th><th style="padding:10px;">Dezavantaje</th></tr>
+                <tr><td style="padding:10px;">Manual cu electrod învelit (SMEI)</td><td></td><td></td></tr>
+                <tr><td style="padding:10px;">MIG/MAG</td><td></td><td></td></tr>
+                <tr><td style="padding:10px;">TIG (WIG)</td><td></td><td></td></tr>
+            </table>
+
+            <h2>2. Parametri Sudare</h2>
+            <p>Calculați intensitatea curentului necesar pentru un electrod cu diametrul de 3.25mm folosind formula empirică: I = (30...50) x d</p>
+            <div style="height: 100px; border-bottom: 1px solid #000; margin: 20px 0;">Rezolvare:</div>
+        `;
+    } else if (type === 'ssm') {
+        title = 'Fișă de Lucru - Protecția Muncii';
+        content = `
+            <h2>1. Echipament Individual de Protecție (EIP)</h2>
+            <p>Asociați riscul cu echipamentul necesar:</p>
+            <ul style="line-height: 2;">
+                <li>Radiații UV/IR .............................. Mască de sudură</li>
+                <li>Fum de sudare .............................. Mască respiratorie</li>
+                <li>Stropi de metal topit ...................... Șorț din piele</li>
+                <li>Electrocutare .............................. Mănuși electroizolante</li>
+                <li>Obiecte grele căzute ..................... Bocanci cu bombeu metalic</li>
+            </ul>
+
+            <h2>2. Primul Ajutor - Arsuri</h2>
+            <p>Descrieți pașii de urmat în cazul unei arsuri superficiale de gradul I:</p>
+            <div style="height: 150px; border: 1px solid #ccc; margin: 20px 0;"></div>
+        `;
+    }
+
+    container.innerHTML = `
+        <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px;">
+            <h1 style="color: #2563eb;">${title}</h1>
+            <p style="color: #666;">Liceul Tehnologic "Aurel Vlaicu" Galați • Modulul 4 CDL</p>
+        </div>
+        ${content}
+        <div style="margin-top: 50px; text-align: right; font-size: 12px; color: #999;">
+            Generat automat pe platforma educațională
+        </div>
+    `;
+
+    // Options for PDF
+    const opt = {
+        margin: 0.5,
+        filename: `${type}_fisa_lucru.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Generate
+    html2pdf().set(opt).from(container).save().then(() => {
+        if (typeof showToast === 'function') {
+            showToast('Fișa de lucru a fost descărcată! 📥', 'success');
+        } else {
+            alert('Fișa de lucru a fost descărcată!');
+        }
+    });
+}
