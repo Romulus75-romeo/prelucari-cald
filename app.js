@@ -586,3 +586,531 @@ document.addEventListener('keydown', (e) => {
 console.log('🔥 Platformă Educațională - Prelucrări la Cald');
 console.log('📚 Modulul 4 CDL - Liceul Tehnologic "Aurel Vlaicu" Galați');
 console.log('👨‍🏫 Prof. Ing. Popescu Romulus');
+
+// ===============================
+// TEXT-TO-SPEECH SYSTEM
+// ===============================
+let ttsUtterance = null;
+let ttsText = '';
+let ttsPosition = 0;
+let ttsPaused = false;
+let ttsActive = false;
+
+function getVisibleSectionText() {
+    const sections = document.querySelectorAll('.chapter-card, .section-header, .theory-box');
+    let text = '';
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top >= 0 && rect.top <= window.innerHeight) {
+            text += section.innerText + ' ';
+        }
+    });
+    return text || 'Selectați o secțiune pentru a citi conținutul.';
+}
+
+function toggleTTS() {
+    if (ttsActive) {
+        stopTTS();
+    } else {
+        startTTS();
+    }
+}
+
+function startTTS() {
+    if (!('speechSynthesis' in window)) {
+        showToast('Browserul nu suportă citirea vocală', 'error');
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    ttsText = getVisibleSectionText();
+    ttsPosition = 0;
+    ttsActive = true;
+    ttsPaused = false;
+
+    speakFromPosition();
+    updateTTSButtons();
+    document.getElementById('ttsIndicator').classList.add('active');
+    showToast('🔊 Citire vocală pornită', 'info');
+}
+
+function speakFromPosition() {
+    const textToSpeak = ttsText.substring(ttsPosition);
+    if (!textToSpeak) {
+        stopTTS();
+        return;
+    }
+
+    ttsUtterance = new SpeechSynthesisUtterance(textToSpeak);
+    ttsUtterance.lang = 'ro-RO';
+    ttsUtterance.rate = 0.9;
+    ttsUtterance.pitch = 1;
+
+    // Find Romanian voice
+    const voices = window.speechSynthesis.getVoices();
+    const roVoice = voices.find(v => v.lang.startsWith('ro'));
+    if (roVoice) ttsUtterance.voice = roVoice;
+
+    ttsUtterance.onboundary = (event) => {
+        if (event.name === 'word') {
+            ttsPosition += event.charIndex;
+            const progress = (ttsPosition / ttsText.length) * 100;
+            document.getElementById('ttsProgressBar').style.width = progress + '%';
+        }
+    };
+
+    ttsUtterance.onend = () => {
+        if (!ttsPaused) {
+            stopTTS();
+            showToast('✅ Citire finalizată', 'success');
+        }
+    };
+
+    window.speechSynthesis.speak(ttsUtterance);
+}
+
+function pauseTTS() {
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        ttsPaused = true;
+        updateTTSButtons();
+        showToast('⏸️ Citire în pauză', 'info');
+    }
+}
+
+function resumeTTS() {
+    if (ttsPaused) {
+        window.speechSynthesis.resume();
+        ttsPaused = false;
+        updateTTSButtons();
+        showToast('▶️ Citire continuă', 'info');
+    }
+}
+
+function stopTTS() {
+    window.speechSynthesis.cancel();
+    ttsActive = false;
+    ttsPaused = false;
+    ttsPosition = 0;
+    updateTTSButtons();
+    document.getElementById('ttsIndicator').classList.remove('active');
+    document.getElementById('ttsProgressBar').style.width = '0%';
+}
+
+function updateTTSButtons() {
+    const playBtn = document.getElementById('ttsPlayBtn');
+    const pauseBtn = document.getElementById('ttsPauseBtn');
+    const resumeBtn = document.getElementById('ttsResumeBtn');
+    const stopBtn = document.getElementById('ttsStopBtn');
+
+    if (ttsActive && !ttsPaused) {
+        playBtn.style.display = 'none';
+        pauseBtn.style.display = 'flex';
+        resumeBtn.style.display = 'none';
+        stopBtn.style.display = 'flex';
+    } else if (ttsActive && ttsPaused) {
+        playBtn.style.display = 'none';
+        pauseBtn.style.display = 'none';
+        resumeBtn.style.display = 'flex';
+        stopBtn.style.display = 'flex';
+    } else {
+        playBtn.style.display = 'flex';
+        pauseBtn.style.display = 'none';
+        resumeBtn.style.display = 'none';
+        stopBtn.style.display = 'none';
+    }
+}
+
+// Load voices
+window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+};
+
+// ===============================
+// DARK MODE
+// ===============================
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDark);
+
+    const btn = document.getElementById('darkModeBtn');
+    btn.querySelector('.toolbar-icon').textContent = isDark ? '☀️' : '🌙';
+    btn.querySelector('.toolbar-label').textContent = isDark ? 'Luminos' : 'Temă';
+
+    showToast(isDark ? '🌙 Mod întunecat activat' : '☀️ Mod luminos activat', 'info');
+}
+
+// Load dark mode preference
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    const btn = document.getElementById('darkModeBtn');
+    if (btn) {
+        btn.querySelector('.toolbar-icon').textContent = '☀️';
+        btn.querySelector('.toolbar-label').textContent = 'Luminos';
+    }
+}
+
+// ===============================
+// SEARCH FUNCTIONALITY
+// ===============================
+const searchableContent = [];
+
+function indexContent() {
+    document.querySelectorAll('.chapter-card').forEach(card => {
+        const title = card.querySelector('h3')?.textContent || '';
+        const content = card.querySelector('.chapter-content')?.textContent || '';
+        const chapter = card.dataset.chapter;
+        searchableContent.push({
+            title: title,
+            content: content.substring(0, 200),
+            chapter: chapter,
+            element: card
+        });
+    });
+}
+
+function openSearch() {
+    document.getElementById('searchModal').classList.add('active');
+    document.getElementById('searchInput').focus();
+    if (searchableContent.length === 0) indexContent();
+}
+
+function closeSearch() {
+    document.getElementById('searchModal').classList.remove('active');
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').innerHTML = '';
+}
+
+function performSearch(event) {
+    const query = event.target.value.toLowerCase();
+    const results = document.getElementById('searchResults');
+
+    if (query.length < 2) {
+        results.innerHTML = '<p style="color: var(--gray-500);">Introdu cel puțin 2 caractere...</p>';
+        return;
+    }
+
+    const matches = searchableContent.filter(item =>
+        item.title.toLowerCase().includes(query) ||
+        item.content.toLowerCase().includes(query)
+    );
+
+    if (matches.length === 0) {
+        results.innerHTML = '<p style="color: var(--gray-500);">Nu s-au găsit rezultate.</p>';
+        return;
+    }
+
+    results.innerHTML = matches.map(item => `
+        <div class="search-result-item" onclick="goToResult('${item.chapter}')">
+            <h4>📖 ${item.title}</h4>
+            <p>${item.content.substring(0, 100)}...</p>
+        </div>
+    `).join('');
+}
+
+function goToResult(chapter) {
+    closeSearch();
+    const card = document.querySelector(`[data-chapter="${chapter}"]`);
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.boxShadow = '0 0 30px rgba(249, 115, 22, 0.5)';
+        setTimeout(() => card.style.boxShadow = '', 2000);
+    }
+}
+
+// ===============================
+// STATISTICS & PROGRESS
+// ===============================
+function getStats() {
+    return JSON.parse(localStorage.getItem('learningStats')) || {
+        testsCompleted: 0,
+        scores: [],
+        studyTime: 0,
+        badges: [],
+        lastVisit: null
+    };
+}
+
+function saveStats(stats) {
+    localStorage.setItem('learningStats', JSON.stringify(stats));
+}
+
+function recordTestResult(score, testType) {
+    const stats = getStats();
+    stats.testsCompleted++;
+    stats.scores.push({ score, date: new Date().toISOString(), type: testType });
+
+    // Check for badges
+    if (stats.testsCompleted === 1 && !stats.badges.includes('first')) {
+        stats.badges.push('first');
+        showToast('🥉 Badge obținut: Primul Test!', 'success');
+        playSound('correct');
+    }
+    if (stats.testsCompleted >= 5 && !stats.badges.includes('five')) {
+        stats.badges.push('five');
+        showToast('🥈 Badge obținut: 5 Teste Complete!', 'success');
+        playSound('correct');
+    }
+    if (score >= 100 && !stats.badges.includes('perfect')) {
+        stats.badges.push('perfect');
+        showToast('🥇 Badge obținut: Scor Perfect!', 'success');
+        playSound('correct');
+    }
+
+    saveStats(stats);
+}
+
+function openStats() {
+    const stats = getStats();
+    document.getElementById('statsModal').classList.add('active');
+
+    // Update stats display
+    document.getElementById('totalTests').textContent = stats.testsCompleted;
+
+    const avgScore = stats.scores.length > 0
+        ? Math.round(stats.scores.reduce((a, b) => a + b.score, 0) / stats.scores.length)
+        : 0;
+    document.getElementById('avgScore').textContent = avgScore + '%';
+
+    document.getElementById('totalTime').textContent = Math.round(stats.studyTime / 60) + ' min';
+    document.getElementById('badges').textContent = stats.badges.length;
+
+    // Update chart
+    renderScoreChart(stats.scores);
+
+    // Update badges
+    updateBadgesDisplay(stats.badges);
+}
+
+function closeStats() {
+    document.getElementById('statsModal').classList.remove('active');
+}
+
+function renderScoreChart(scores) {
+    const container = document.getElementById('scoreChart');
+    const lastScores = scores.slice(-10);
+
+    if (lastScores.length === 0) {
+        container.innerHTML = '<p style="color: var(--gray-500); text-align: center;">Nu există date încă.</p>';
+        return;
+    }
+
+    container.innerHTML = lastScores.map((s, i) =>
+        `<div class="chart-bar" style="height: ${s.score}%" title="Test ${i + 1}: ${s.score}%"></div>`
+    ).join('');
+}
+
+function updateBadgesDisplay(earnedBadges) {
+    const badgeMap = {
+        'first': 0,
+        'five': 1,
+        'perfect': 2,
+        'welder': 3,
+        'drawing': 4,
+        'ssm': 5
+    };
+
+    const badges = document.querySelectorAll('#badgesGrid .badge');
+    badges.forEach(badge => badge.classList.add('locked'));
+
+    earnedBadges.forEach(b => {
+        if (badgeMap[b] !== undefined) {
+            badges[badgeMap[b]]?.classList.remove('locked');
+        }
+    });
+}
+
+function resetStats() {
+    if (confirm('Sigur vrei să ștergi toate statisticile?')) {
+        localStorage.removeItem('learningStats');
+        showToast('🗑️ Statisticile au fost șterse', 'warning');
+        closeStats();
+    }
+}
+
+// ===============================
+// FLASHCARDS
+// ===============================
+const flashcardsData = [
+    { q: 'Ce înseamnă scara 2:1?', a: 'Scară de mărire', category: 'desen' },
+    { q: 'Ce simbol reprezintă diametrul?', a: 'Ø', category: 'desen' },
+    { q: 'Ce parametru de rugozitate este Ra?', a: 'Abaterea medie aritmetică', category: 'desen' },
+    { q: 'Ce simbolizează triunghiul △?', a: 'Sudură în colț', category: 'desen' },
+    { q: 'Ce standard reglementează simbolurile de sudură?', a: 'ISO 2553', category: 'desen' },
+    { q: 'Ce gaz se folosește la sudarea TIG?', a: 'Argon pur', category: 'sudura' },
+    { q: 'Care procedeu folosește electrod învelit?', a: 'MMA/SMAW', category: 'sudura' },
+    { q: 'Formula curentului de sudare?', a: 'I = (30-40) × d', category: 'sudura' },
+    { q: 'Ce defect apare la răcire rapidă?', a: 'Fisuri', category: 'sudura' },
+    { q: 'Ce este controlul VT?', a: 'Control vizual', category: 'sudura' },
+    { q: 'Legea principală SSM?', a: 'Legea 319/2006', category: 'ssm' },
+    { q: 'Filtru mască sudură DIN?', a: 'DIN 9-13', category: 'ssm' },
+    { q: 'Tensiunea în gol la sudare?', a: '60-90V', category: 'ssm' },
+    { q: 'Cât timp se supraveghează după sudare?', a: '30 minute', category: 'ssm' },
+    { q: 'Ce tip de stingător pentru sudură?', a: 'CO2 sau pulbere', category: 'ssm' }
+];
+
+let currentFlashcards = [...flashcardsData];
+let currentFlashcardIndex = 0;
+
+function openFlashcards() {
+    document.getElementById('flashcardsModal').classList.add('active');
+    showFlashcard();
+}
+
+function closeFlashcards() {
+    document.getElementById('flashcardsModal').classList.remove('active');
+    document.getElementById('currentFlashcard').classList.remove('flipped');
+}
+
+function showFlashcard() {
+    const card = currentFlashcards[currentFlashcardIndex];
+    document.getElementById('flashcardQuestion').textContent = card.q;
+    document.getElementById('flashcardAnswer').textContent = card.a;
+    document.getElementById('flashcardCounter').textContent =
+        `${currentFlashcardIndex + 1}/${currentFlashcards.length}`;
+    document.getElementById('currentFlashcard').classList.remove('flipped');
+}
+
+function flipFlashcard() {
+    document.getElementById('currentFlashcard').classList.toggle('flipped');
+}
+
+function nextFlashcard() {
+    currentFlashcardIndex = (currentFlashcardIndex + 1) % currentFlashcards.length;
+    showFlashcard();
+}
+
+function prevFlashcard() {
+    currentFlashcardIndex = (currentFlashcardIndex - 1 + currentFlashcards.length) % currentFlashcards.length;
+    showFlashcard();
+}
+
+function setFlashcardCategory(category) {
+    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    currentFlashcards = category === 'all'
+        ? [...flashcardsData]
+        : flashcardsData.filter(f => f.category === category);
+    currentFlashcardIndex = 0;
+    showFlashcard();
+}
+
+// ===============================
+// NOTES SYSTEM
+// ===============================
+function toggleNotes() {
+    document.getElementById('notesPanel').classList.toggle('active');
+    loadNote();
+}
+
+function closeNotes() {
+    document.getElementById('notesPanel').classList.remove('active');
+}
+
+function loadNote() {
+    const chapter = document.getElementById('noteChapter').value;
+    const notes = JSON.parse(localStorage.getItem('userNotes')) || {};
+    document.getElementById('noteContent').value = notes[chapter] || '';
+}
+
+function saveNote() {
+    const chapter = document.getElementById('noteChapter').value;
+    const content = document.getElementById('noteContent').value;
+    const notes = JSON.parse(localStorage.getItem('userNotes')) || {};
+    notes[chapter] = content;
+    localStorage.setItem('userNotes', JSON.stringify(notes));
+    showToast('💾 Notiță salvată!', 'success');
+}
+
+// ===============================
+// TOAST NOTIFICATIONS
+// ===============================
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = message;
+    container.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ===============================
+// SOUND EFFECTS
+// ===============================
+function playSound(type) {
+    const sound = document.getElementById(type === 'correct' ? 'correctSound' : 'incorrectSound');
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => { });
+    }
+}
+
+// ===============================
+// ENHANCED TEST SUBMISSION
+// ===============================
+const originalSubmitTest = submitTest;
+submitTest = function () {
+    // Calculate score
+    let correctCount = 0;
+    testQuestions.forEach((question, index) => {
+        if (userAnswers[index] === question.correct) {
+            correctCount++;
+            playSound('correct');
+        }
+    });
+
+    const percentage = Math.round((correctCount / testQuestions.length) * 100);
+
+    // Record for stats
+    recordTestResult(percentage, currentTest);
+
+    // Call original function
+    originalSubmitTest();
+};
+
+// ===============================
+// STUDY TIME TRACKING
+// ===============================
+let studyStartTime = Date.now();
+
+window.addEventListener('beforeunload', () => {
+    const stats = getStats();
+    stats.studyTime += Math.round((Date.now() - studyStartTime) / 1000);
+    stats.lastVisit = new Date().toISOString();
+    saveStats(stats);
+});
+
+// ===============================
+// KEYBOARD SHORTCUTS
+// ===============================
+document.addEventListener('keydown', (e) => {
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        closeSearch();
+        closeStats();
+        closeFlashcards();
+        closeNotes();
+    }
+
+    // Ctrl+K for search
+    if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+    }
+
+    // D for dark mode
+    if (e.key === 'd' && !e.ctrlKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        toggleDarkMode();
+    }
+});
+
+// ===============================
+// INITIALIZE
+// ===============================
+console.log('✅ Toate funcționalitățile interactive au fost încărcate!');
+console.log('📊 Statistici, 🎯 Flashcards, 🔍 Căutare, 🌙 Mod întunecat, 📝 Notițe');
+console.log('🔊 Citire vocală cu Pauză/Continuare disponibilă');

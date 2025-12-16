@@ -987,6 +987,190 @@
         </div>
     </footer>
 
+    <!-- FLOATING TOOLBAR -->
+    <div class="floating-toolbar" id="floatingToolbar">
+        <button class="toolbar-btn" id="ttsPlayBtn" onclick="toggleTTS()" title="Citire vocală">
+            <span class="toolbar-icon">🔊</span>
+            <span class="toolbar-label">Citește</span>
+        </button>
+        <button class="toolbar-btn" id="ttsPauseBtn" onclick="pauseTTS()" title="Pauză" style="display:none;">
+            <span class="toolbar-icon">⏸️</span>
+            <span class="toolbar-label">Pauză</span>
+        </button>
+        <button class="toolbar-btn" id="ttsResumeBtn" onclick="resumeTTS()" title="Continuă" style="display:none;">
+            <span class="toolbar-icon">▶️</span>
+            <span class="toolbar-label">Continuă</span>
+        </button>
+        <button class="toolbar-btn" id="ttsStopBtn" onclick="stopTTS()" title="Stop" style="display:none;">
+            <span class="toolbar-icon">⏹️</span>
+            <span class="toolbar-label">Stop</span>
+        </button>
+        <div class="toolbar-divider"></div>
+        <button class="toolbar-btn" id="darkModeBtn" onclick="toggleDarkMode()" title="Mod întunecat">
+            <span class="toolbar-icon">🌙</span>
+            <span class="toolbar-label">Temă</span>
+        </button>
+        <button class="toolbar-btn" onclick="openSearch()" title="Căutare">
+            <span class="toolbar-icon">🔍</span>
+            <span class="toolbar-label">Caută</span>
+        </button>
+        <button class="toolbar-btn" onclick="openStats()" title="Statistici">
+            <span class="toolbar-icon">📊</span>
+            <span class="toolbar-label">Statistici</span>
+        </button>
+        <button class="toolbar-btn" onclick="openFlashcards()" title="Flashcards">
+            <span class="toolbar-icon">🎯</span>
+            <span class="toolbar-label">Carduri</span>
+        </button>
+    </div>
+
+    <!-- SEARCH MODAL -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-container">
+            <div class="search-header">
+                <input type="text" id="searchInput" placeholder="Caută în conținut..." onkeyup="performSearch(event)">
+                <button class="close-btn" onclick="closeSearch()">&times;</button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- STATS MODAL -->
+    <div class="stats-modal" id="statsModal">
+        <div class="stats-content">
+            <div class="modal-header">
+                <h2>📊 Statistici de Învățare</h2>
+                <button class="close-btn" onclick="closeStats()">&times;</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-icon">📝</span>
+                    <span class="stat-value" id="totalTests">0</span>
+                    <span class="stat-name">Teste Rezolvate</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-value" id="avgScore">0%</span>
+                    <span class="stat-name">Scor Mediu</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">⏱️</span>
+                    <span class="stat-value" id="totalTime">0 min</span>
+                    <span class="stat-name">Timp Studiu</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🏆</span>
+                    <span class="stat-value" id="badges">0</span>
+                    <span class="stat-name">Badge-uri</span>
+                </div>
+            </div>
+            <div class="stats-chart">
+                <h4>Evoluție Scoruri</h4>
+                <div class="chart-container" id="scoreChart"></div>
+            </div>
+            <div class="badges-section">
+                <h4>🏆 Badge-uri Obținute</h4>
+                <div class="badges-grid" id="badgesGrid">
+                    <div class="badge locked" title="Primul Test">🥉</div>
+                    <div class="badge locked" title="5 Teste Complete">🥈</div>
+                    <div class="badge locked" title="Scor Perfect">🥇</div>
+                    <div class="badge locked" title="Maestru Sudor">🔥</div>
+                    <div class="badge locked" title="Expert Desen">📐</div>
+                    <div class="badge locked" title="SSM Pro">⚠️</div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="resetStats()">🗑️ Resetează Statisticile</button>
+        </div>
+    </div>
+
+    <!-- FLASHCARDS MODAL -->
+    <div class="flashcards-modal" id="flashcardsModal">
+        <div class="flashcards-content">
+            <div class="modal-header">
+                <h2>🎯 Flashcards - Învață Rapid</h2>
+                <button class="close-btn" onclick="closeFlashcards()">&times;</button>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="currentFlashcard" onclick="flipFlashcard()">
+                    <div class="flashcard-front">
+                        <span class="flashcard-question" id="flashcardQuestion">Întrebare</span>
+                        <span class="flashcard-hint">Click pentru răspuns</span>
+                    </div>
+                    <div class="flashcard-back">
+                        <span class="flashcard-answer" id="flashcardAnswer">Răspuns</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flashcard-nav">
+                <button class="btn btn-secondary" onclick="prevFlashcard()">← Anterior</button>
+                <span id="flashcardCounter">1/20</span>
+                <button class="btn btn-primary" onclick="nextFlashcard()">Următor →</button>
+            </div>
+            <div class="flashcard-categories">
+                <button class="category-btn active" onclick="setFlashcardCategory('all')">Toate</button>
+                <button class="category-btn" onclick="setFlashcardCategory('desen')">Desen Tehnic</button>
+                <button class="category-btn" onclick="setFlashcardCategory('sudura')">Sudură</button>
+                <button class="category-btn" onclick="setFlashcardCategory('ssm')">SSM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTES PANEL -->
+    <div class="notes-panel" id="notesPanel">
+        <div class="notes-header">
+            <h3>📝 Notițele Mele</h3>
+            <button class="close-btn" onclick="closeNotes()">&times;</button>
+        </div>
+        <div class="notes-content">
+            <select id="noteChapter" onchange="loadNote()">
+                <option value="general">📌 Note Generale</option>
+                <option value="1.1">1.1 Scări de Reprezentare</option>
+                <option value="1.2">1.2 Reguli de Cotare</option>
+                <option value="1.3">1.3 Rugozitate</option>
+                <option value="1.4">1.4 Simboluri Sudură</option>
+                <option value="2.1">2.1 Echipament Sudare</option>
+                <option value="2.2">2.2 Tipuri Sudură</option>
+                <option value="2.3">2.3 Rosturi</option>
+                <option value="2.4">2.4 Parametri</option>
+                <option value="2.5">2.5 Control</option>
+                <option value="2.6">2.6 Defecte</option>
+                <option value="3.1">3.1 Legislație</option>
+                <option value="3.2">3.2 Riscuri</option>
+                <option value="3.3">3.3 EIP</option>
+                <option value="3.4">3.4 PSI</option>
+            </select>
+            <textarea id="noteContent" placeholder="Scrie notițele tale aici..."></textarea>
+            <button class="btn btn-primary" onclick="saveNote()">💾 Salvează</button>
+        </div>
+    </div>
+
+    <!-- NOTES TOGGLE BUTTON ON CHAPTERS -->
+    <button class="notes-toggle" id="notesToggle" onclick="toggleNotes()" title="Notițe">📝</button>
+
+    <!-- TTS PROGRESS INDICATOR -->
+    <div class="tts-indicator" id="ttsIndicator">
+        <span class="tts-icon">🔊</span>
+        <span class="tts-text">Citire în progres...</span>
+        <div class="tts-progress">
+            <div class="tts-progress-bar" id="ttsProgressBar"></div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- AUDIO EFFECTS -->
+    <audio id="correctSound" preload="auto">
+        <source
+            src="data:audio/wav;base64,UklGRl4DAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToDAAB/f39/f39/f39/f3+AgICAgICAgIGBgYGBgYGBgoKCgoKCgoKDg4ODg4ODg4SEhISEhISEhYWFhYWFhYWGhoaGhoaGhoeHh4eHh4eHiIiIiIiIiIiJiYmJiYmJiYqKioqKioqKi4uLi4uLi4uGhoaGhoaGhoGBgYGBgYGBfHx8fHx8fHx3d3d3d3d3d3R0dHR0dHR0cnJycnJycnJxcXFxcXFxcXBwcHBwcHBwb29vb29vb29vb29vb29vb3BwcHBwcHBwcXFxcXFxcXFycnJycnJycnNzc3Nzc3Nzd3d3d3d3d3d8fHx8fHx8fIGBgYGBgYGBhoaGhoaGhoaLi4uLi4uLi4+Pj4+Pj4+Pk5OTk5OTk5OYmJiYmJiYmJycnJycnJycn5+fn5+fn5+hoaGhoaGhoaSkpKSkpKSkpqampqampqanp6enp6enp6ioqKioqKioqampqampqampqqqqqqqqqqurq6urq6urq6ysrKysrKysra2tra2tra2urq6urq6urq+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vra2tra2tra2srKysrKysrKurq6urq6urqqqqqqqqqqqqKSkpKSkpKSkoKCgoKCgoKCfn5+fn5+fn5+enp6enp6enp2dnZ2dnZ2dnZycnJycnJycm5ubm5ubm5uampqampqampmZmZmZmZmZmJiYmJiYmJiXl5eXl5eXl5aWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpb/f39/f39/fw=="
+            type="audio/wav">
+    </audio>
+    <audio id="incorrectSound" preload="auto">
+        <source
+            src="data:audio/wav;base64,UklGRl4DAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToDAAB/f39/f39/f39/f35+fn5+fn5+fn5+fX19fX19fX19fX18fHx8fHx8fHx8fHt7e3t7e3t7e3t7enp6enp6enp6enp5eXl5eXl5eXl5eXh4eHh4eHh4eHh4d3d3d3d3d3d3d3d2dnZ2dnZ2dnZ2dnV1dXV1dXV1dXV1dHR0dHR0dHR0dHRzc3Nzc3Nzc3Nzc3JycnJycnJycnJygoKCgoKCgoKCgoKPj4+Pj4+Pj4+Pj5ycnJycnJycnJycno+Pj4+Pj4+Pj4+PgoKCgoKCgoKCgoJ2dnZ2dnZ2dnZ2dnJycnJycnJycnJyca2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra3BwcHBwcHBwcHBwd3d3d3d3d3d3d3d+fn5+fn5+fn5+foWFhYWFhYWFhYWFjIyMjIyMjIyMjIyTk5OTk5OTk5OTk5qampqampqampqamqGhoaGhoaGhoaGhqKioqKioqKioqKivr6+vr6+vr6+vr7W1tbW1tbW1tbW1u7u7u7u7u7u7u7vBwcHBwcHBwcHBwcfHx8fHx8fHx8fHzc3Nzc3Nzc3Nzc3S0tLS0tLS0tLS0tjY2NjY2NjY2NjY/39/f39/f39/f39/f39/f39/f39/f39/"
+            type="audio/wav">
+    </audio>
+
     <script src="app.js"></script>
 </body>
 
