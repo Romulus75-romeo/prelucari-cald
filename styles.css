@@ -2206,6 +2206,36 @@ body.dark-mode .notes-header {
     font-weight: 600;
 }
 
+.notes-header .close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gray-200);
+    color: var(--gray-600);
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.notes-header .close-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+body.dark-mode .notes-header .close-btn {
+    background: #334155;
+    color: #94a3b8;
+}
+
+body.dark-mode .notes-header .close-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
 .notes-content {
     flex: 1;
     display: flex;
