@@ -639,6 +639,62 @@ body {
     border: none;
 }
 
+/* Video Link Placeholder */
+.video-link {
+    text-decoration: none;
+    display: block;
+}
+
+.video-placeholder {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.video-placeholder:hover {
+    transform: translateY(-4px);
+    border-color: #ff0000;
+    box-shadow: 0 10px 40px rgba(255, 0, 0, 0.2);
+}
+
+.play-icon {
+    font-size: 3rem;
+    color: #ff0000;
+    background: rgba(255, 255, 255, 0.1);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.video-placeholder:hover .play-icon {
+    background: #ff0000;
+    color: white;
+    transform: scale(1.1);
+}
+
+.video-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: white;
+}
+
+.video-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-400);
+}
+
 /* ===============================
    WELD TYPES GRID
    =============================== */
