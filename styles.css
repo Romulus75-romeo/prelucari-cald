@@ -799,10 +799,90 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.welding-type-card p {
+body.dark-mode .comparison-table-container h4 {
+    color: #f1f5f9;
+}
+
+/* Comparison Table */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
     font-size: 0.875rem;
-    color: var(--gray-600);
-    margin-bottom: 0.75rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+body.dark-mode .comparison-table th,
+body.dark-mode .comparison-table td {
+    border-color: #334155;
+}
+
+.comparison-table th {
+    background: var(--gradient-dark);
+    color: white;
+    font-weight: 600;
+}
+
+.comparison-table th:first-child {
+    border-radius: 0.5rem 0 0 0;
+}
+
+.comparison-table th:last-child {
+    border-radius: 0 0.5rem 0 0;
+}
+
+.comparison-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+body.dark-mode .comparison-table td:first-child {
+    color: #e2e8f0;
+}
+
+.comparison-table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+body.dark-mode .comparison-table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* Electrode Table */
+.electrode-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+.electrode-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+body.dark-mode .electrode-table td {
+    border-color: #334155;
+}
+
+.electrode-table td:first-child {
+    width: 120px;
+    white-space: nowrap;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Welding Process SVG */
+.welding-process-svg {
+    width: 100%;
+    max-height: 350px;
+    margin-top: 1rem;
 }
 
 .pros-cons {

@@ -386,42 +386,211 @@
                 </div>
 
                 <!-- Capitol 2.2 -->
-                <div class="chapter-card" data-chapter="2.2">
+                <div class="chapter-card full-width" data-chapter="2.2">
                     <div class="chapter-header">
                         <span class="chapter-number">2.2</span>
-                        <h3>Tipuri de Sudură Utilizate</h3>
+                        <h3>Tipuri de Sudură și Comparație Tehnică Detaliată</h3>
                     </div>
                     <div class="chapter-content">
+                        <!-- Detailed Welding Types -->
                         <div class="welding-types">
                             <div class="welding-type-card">
-                                <h5>Sudare Manuală cu Arc Electric (MMA/SMAW)</h5>
-                                <p>Cel mai răspândit procedeu. Folosește electrozi înveliți care se topesc în timpul
-                                    sudării.</p>
+                                <h5>🔴 Sudare Manuală cu Arc Electric (MMA/SMAW)</h5>
+                                <p><strong>Principiu:</strong> Arc electric între electrod învelit și piesă. Electrodul
+                                    se topește și materialul de adaos provine chiar din electrod.</p>
+                                <ul class="detailed-list">
+                                    <li><strong>Curent:</strong> 60-350A (formula: I = 30-40 × d electrod)</li>
+                                    <li><strong>Materiale:</strong> Oțel carbon, inox, fontă</li>
+                                    <li><strong>Grosimi:</strong> 2-50 mm</li>
+                                    <li><strong>Poziții:</strong> Toate pozițiile</li>
+                                </ul>
                                 <div class="pros-cons">
-                                    <span class="pro">✓ Echipament simplu</span>
-                                    <span class="pro">✓ Versatilitate</span>
+                                    <span class="pro">✓ Echipament simplu și ieftin</span>
+                                    <span class="pro">✓ Portabil, fără gaz</span>
+                                    <span class="pro">✓ Funcționează în exterior</span>
                                     <span class="con">✗ Productivitate redusă</span>
+                                    <span class="con">✗ Zgură de curățat</span>
                                 </div>
                             </div>
                             <div class="welding-type-card">
-                                <h5>Sudare MIG/MAG (GMAW)</h5>
-                                <p>Sudare cu sârmă continuă în mediu de gaz protector (CO2 sau Argon + CO2).</p>
+                                <h5>🔵 Sudare MIG/MAG (GMAW)</h5>
+                                <p><strong>Principiu:</strong> Arc electric cu sârmă continuă alimentată automat. Gaz de
+                                    protecție: <strong>MIG</strong> = Argon/Heliu (inert), <strong>MAG</strong> = CO₂
+                                    sau Ar+CO₂ (activ).</p>
+                                <ul class="detailed-list">
+                                    <li><strong>Tensiune arc:</strong> 18-26V</li>
+                                    <li><strong>Curent:</strong> 50-500A</li>
+                                    <li><strong>Viteza sârmei:</strong> 2-20 m/min</li>
+                                    <li><strong>Debit gaz:</strong> 12-25 l/min</li>
+                                    <li><strong>Grosimi:</strong> 0.5-30 mm</li>
+                                </ul>
                                 <div class="pros-cons">
-                                    <span class="pro">✓ Productivitate mare</span>
-                                    <span class="pro">✓ Calitate superioară</span>
-                                    <span class="con">✗ Echipament complex</span>
+                                    <span class="pro">✓ Productivitate ridicată</span>
+                                    <span class="pro">✓ Ușor de automatizat</span>
+                                    <span class="pro">✓ Fără zgură</span>
+                                    <span class="con">✗ Sensibil la vânt</span>
+                                    <span class="con">✗ Echipament costisitor</span>
                                 </div>
                             </div>
                             <div class="welding-type-card">
-                                <h5>Sudare TIG (GTAW)</h5>
-                                <p>Sudare cu electrod de wolfram netopibil în atmosferă de argon pur.</p>
+                                <h5>🟢 Sudare TIG (GTAW)</h5>
+                                <p><strong>Principiu:</strong> Electrod de tungsten <strong>netopibil</strong>.
+                                    Materialul de adaos se introduce manual ca baghetă. Gaz: Argon 100% sau Ar+He.</p>
+                                <ul class="detailed-list">
+                                    <li><strong>Curent DC:</strong> 5-300A (control cu pedală)</li>
+                                    <li><strong>Curent AC:</strong> Pentru aluminiu și magneziu</li>
+                                    <li><strong>Debit argon:</strong> 5-15 l/min</li>
+                                    <li><strong>Grosimi:</strong> 0.3-8 mm (optim &lt;5 mm)</li>
+                                </ul>
                                 <div class="pros-cons">
                                     <span class="pro">✓ Calitate excelentă</span>
-                                    <span class="pro">✓ Precizie mare</span>
+                                    <span class="pro">✓ Precizie maximă</span>
+                                    <span class="pro">✓ Aspect estetic perfect</span>
                                     <span class="con">✗ Viteză redusă</span>
+                                    <span class="con">✗ Necesită dexteritate</span>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Comparison Table -->
+                        <div class="comparison-table-container">
+                            <h4>📊 Tabel Comparativ Procedee de Sudare</h4>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Criteriu</th>
+                                        <th>MMA/SMAW</th>
+                                        <th>MIG/MAG</th>
+                                        <th>TIG</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Productivitate</strong></td>
+                                        <td>⭐⭐</td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                        <td>⭐⭐</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Calitate sudură</strong></td>
+                                        <td>⭐⭐⭐</td>
+                                        <td>⭐⭐⭐⭐</td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ușurință învățare</strong></td>
+                                        <td>⭐⭐⭐⭐</td>
+                                        <td>⭐⭐⭐⭐⭐</td>
+                                        <td>⭐⭐</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cost echipament</strong></td>
+                                        <td>500-2000€</td>
+                                        <td>800-5000€</td>
+                                        <td>1000-8000€</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Grosime optimă</strong></td>
+                                        <td>3-25 mm</td>
+                                        <td>1-30 mm</td>
+                                        <td>0.5-5 mm</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Materiale</strong></td>
+                                        <td>Oțel, inox, fontă</td>
+                                        <td>Oțel, inox, aluminiu</td>
+                                        <td>Toate metalele</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Folosire în exterior</strong></td>
+                                        <td>✅ Da</td>
+                                        <td>❌ Nu (vânt)</td>
+                                        <td>❌ Nu</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Welding Process SVG Diagram -->
+                        <div class="diagram-box">
+                            <h4>⚡ Schema Procesului de Sudare MIG/MAG</h4>
+                            <svg viewBox="0 0 500 300" class="welding-process-svg">
+                                <!-- Background -->
+                                <rect x="0" y="0" width="500" height="300" fill="#f8fafc" />
+
+                                <!-- Workpiece -->
+                                <rect x="50" y="220" width="400" height="60" fill="#64748b" rx="5" />
+                                <text x="250" y="255" text-anchor="middle" fill="white" font-size="14"
+                                    font-weight="bold">PIESA DE SUDAT</text>
+
+                                <!-- Weld bead -->
+                                <ellipse cx="250" cy="220" rx="40" ry="15" fill="#f97316" />
+                                <text x="250" y="224" text-anchor="middle" fill="white" font-size="10"
+                                    font-weight="bold">Cordon</text>
+
+                                <!-- Arc -->
+                                <line x1="250" y1="120" x2="250" y2="205" stroke="#3b82f6" stroke-width="4" />
+                                <circle cx="250" cy="200" r="20" fill="#60a5fa" opacity="0.6" />
+                                <text x="270" y="175" fill="#1e40af" font-size="11">Arc Electric</text>
+
+                                <!-- Wire electrode -->
+                                <line x1="250" y1="30" x2="250" y2="120" stroke="#94a3b8" stroke-width="3" />
+                                <circle cx="250" cy="120" r="5" fill="#94a3b8" />
+                                <text x="280" y="80" fill="#334155" font-size="11">Sârmă electrod</text>
+
+                                <!-- Gas nozzle -->
+                                <path d="M220 50 L220 120 L280 120 L280 50 Z" fill="#1e293b" />
+                                <text x="250" y="145" text-anchor="middle" fill="#64748b" font-size="10">Duză gaz</text>
+
+                                <!-- Gas flow arrows -->
+                                <path d="M230 100 L230 180 M240 100 L240 190 M260 100 L260 190 M270 100 L270 180"
+                                    stroke="#10b981" stroke-width="2" stroke-dasharray="5,3" opacity="0.7" />
+                                <text x="320" y="150" fill="#059669" font-size="11">Gaz protecție</text>
+
+                                <!-- Wire reel -->
+                                <circle cx="120" cy="50" r="30" fill="none" stroke="#475569" stroke-width="3" />
+                                <circle cx="120" cy="50" r="10" fill="#475569" />
+                                <line x1="150" y1="50" x2="220" y2="50" stroke="#94a3b8" stroke-width="2" />
+                                <text x="120" y="90" text-anchor="middle" fill="#334155" font-size="10">Bobină</text>
+
+                                <!-- Current source -->
+                                <rect x="380" y="30" width="80" height="50" fill="#1e40af" rx="5" />
+                                <text x="420" y="60" text-anchor="middle" fill="white" font-size="10"
+                                    font-weight="bold">SURSĂ</text>
+                                <line x1="380" y1="55" x2="280" y2="55" stroke="#ef4444" stroke-width="2" />
+                                <text x="420" y="100" text-anchor="middle" fill="#1e40af" font-size="9">18-26V /
+                                    50-500A</text>
+
+                                <!-- Ground cable -->
+                                <line x1="420" y1="80" x2="420" y2="220" stroke="#22c55e" stroke-width="3" />
+                                <circle cx="420" cy="220" r="8" fill="#22c55e" />
+                                <text x="450" y="165" fill="#15803d" font-size="10">Masă (+)</text>
+                            </svg>
+                        </div>
+
+                        <!-- Electrode Types Table -->
+                        <div class="theory-box">
+                            <h4>📋 Tipuri de Electrozi (pentru MMA)</h4>
+                            <table class="electrode-table">
+                                <tr>
+                                    <td><strong>E6010/E6011</strong></td>
+                                    <td>Celulozic - pătrundere adâncă, poziții dificile</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>E6013</strong></td>
+                                    <td>Rutilic - universal, ușor de folosit, arc stabil</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>E7018</strong></td>
+                                    <td>Bazic - rezistență mare, hidrogen scăzut, calitate excelentă</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>E308L/E316L</strong></td>
+                                    <td>Pentru oțel inoxidabil - rezistență la coroziune</td>
+                                </tr>
+                            </table>
+                        </div>
+
                         <div class="video-box">
                             <h4>🎬 Curs Complet Sudură</h4>
                             <a href="https://www.youtube.com/results?search_query=curs+sudura+electrod+incepatori"
@@ -434,6 +603,7 @@
                             </a>
                         </div>
                     </div>
+                    <button class="expand-btn">Vezi Detalii Complete</button>
                 </div>
 
                 <!-- Capitol 2.3 -->
