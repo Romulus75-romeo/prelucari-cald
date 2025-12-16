@@ -1114,3 +1114,443 @@ document.addEventListener('keydown', (e) => {
 console.log('✅ Toate funcționalitățile interactive au fost încărcate!');
 console.log('📊 Statistici, 🎯 Flashcards, 🔍 Căutare, 🌙 Mod întunecat, 📝 Notițe');
 console.log('🔊 Citire vocală cu Pauză/Continuare disponibilă');
+
+// ===============================
+// 🎮 GAMIFICATION SYSTEM
+// ===============================
+
+// XP and Level System
+const LEVEL_CONFIG = {
+    levels: [
+        { name: '🌱 Începător', minXP: 0, color: '#10b981' },
+        { name: '🔧 Ucenic', minXP: 100, color: '#3b82f6' },
+        { name: '⚡ Sudor', minXP: 300, color: '#8b5cf6' },
+        { name: '🔥 Expert', minXP: 600, color: '#f97316' },
+        { name: '👑 Maestru', minXP: 1000, color: '#eab308' }
+    ],
+    xpPerCorrectAnswer: 10,
+    xpPerTestComplete: 50,
+    xpPerChapterRead: 20,
+    xpPerFlashcard: 5
+};
+
+function getPlayerData() {
+    const data = localStorage.getItem('playerData');
+    return data ? JSON.parse(data) : {
+        xp: 0,
+        level: 0,
+        chaptersRead: [],
+        bookmarks: [],
+        achievements: [],
+        dailyStreak: 0,
+        lastPlayDate: null
+    };
+}
+
+function savePlayerData(data) {
+    localStorage.setItem('playerData', JSON.stringify(data));
+}
+
+function addXP(amount, reason = '') {
+    const data = getPlayerData();
+    const oldLevel = getCurrentLevel(data.xp);
+    data.xp += amount;
+    const newLevel = getCurrentLevel(data.xp);
+    savePlayerData(data);
+
+    // Show XP notification
+    showXPNotification(amount, reason);
+
+    // Level up celebration
+    if (newLevel.name !== oldLevel.name) {
+        celebrateLevelUp(newLevel);
+    }
+
+    updateProgressDashboard();
+}
+
+function getCurrentLevel(xp) {
+    let currentLevel = LEVEL_CONFIG.levels[0];
+    for (const level of LEVEL_CONFIG.levels) {
+        if (xp >= level.minXP) {
+            currentLevel = level;
+        }
+    }
+    return currentLevel;
+}
+
+function getNextLevel(xp) {
+    for (const level of LEVEL_CONFIG.levels) {
+        if (xp < level.minXP) {
+            return level;
+        }
+    }
+    return null;
+}
+
+function showXPNotification(amount, reason) {
+    const notification = document.createElement('div');
+    notification.className = 'xp-notification';
+    notification.innerHTML = `+${amount} XP ${reason ? `<span class="xp-reason">${reason}</span>` : ''}`;
+    document.body.appendChild(notification);
+
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 2000);
+}
+
+// ===============================
+// 🎊 CONFETTI SYSTEM
+// ===============================
+function createConfetti() {
+    const colors = ['#3b82f6', '#10b981', '#f97316', '#eab308', '#ef4444', '#8b5cf6'];
+    const confettiCount = 150;
+
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 4000);
+        }, i * 20);
+    }
+}
+
+function celebrateLevelUp(level) {
+    createConfetti();
+    playSound('badge');
+
+    const modal = document.createElement('div');
+    modal.className = 'level-up-modal';
+    modal.innerHTML = `
+        <div class="level-up-content">
+            <div class="level-up-icon">🎉</div>
+            <h2>NIVEL NOU!</h2>
+            <h3 style="color: ${level.color}">${level.name}</h3>
+            <p>Felicitări! Ai avansat la un nou nivel!</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="btn btn-primary">Continuă</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function celebrateTestComplete(score) {
+    if (score >= 70) {
+        createConfetti();
+        playSound('badge');
+    }
+}
+
+// ===============================
+// 📊 PROGRESS DASHBOARD
+// ===============================
+function openDashboard() {
+    const data = getPlayerData();
+    const stats = getStats();
+    const level = getCurrentLevel(data.xp);
+    const nextLevel = getNextLevel(data.xp);
+    const progress = nextLevel ? ((data.xp - level.minXP) / (nextLevel.minXP - level.minXP)) * 100 : 100;
+
+    const modal = document.createElement('div');
+    modal.className = 'dashboard-modal';
+    modal.id = 'dashboardModal';
+    modal.innerHTML = `
+        <div class="dashboard-content">
+            <div class="dashboard-header">
+                <h2>📊 Progresul Meu</h2>
+                <button class="close-btn" onclick="closeDashboard()">×</button>
+            </div>
+            <div class="dashboard-body">
+                <div class="level-card" style="border-color: ${level.color}">
+                    <div class="level-icon">${level.name.split(' ')[0]}</div>
+                    <div class="level-info">
+                        <h3>${level.name}</h3>
+                        <div class="xp-bar">
+                            <div class="xp-fill" style="width: ${progress}%; background: ${level.color}"></div>
+                        </div>
+                        <p>${data.xp} XP ${nextLevel ? `/ ${nextLevel.minXP} XP` : '(MAX)'}</p>
+                    </div>
+                </div>
+                
+                <div class="stats-quick">
+                    <div class="stat-item">
+                        <span class="stat-icon">📝</span>
+                        <span class="stat-value">${stats.testsCompleted}</span>
+                        <span class="stat-label">Teste</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🎯</span>
+                        <span class="stat-value">${stats.averageScore}%</span>
+                        <span class="stat-label">Medie</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⏱️</span>
+                        <span class="stat-value">${Math.round(stats.studyTime / 60)}</span>
+                        <span class="stat-label">Minute</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🔖</span>
+                        <span class="stat-value">${data.bookmarks.length}</span>
+                        <span class="stat-label">Marcaje</span>
+                    </div>
+                </div>
+                
+                <div class="daily-challenge">
+                    <h4>🎯 Provocare Zilnică</h4>
+                    <p>Completează un test cu scor peste 80%</p>
+                    <div class="challenge-reward">🎁 +50 XP Bonus</div>
+                </div>
+                
+                <div class="achievements-preview">
+                    <h4>🏆 Realizări Recente</h4>
+                    <div class="achievements-row">
+                        ${renderAchievementMini(stats)}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function closeDashboard() {
+    const modal = document.getElementById('dashboardModal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+function renderAchievementMini(stats) {
+    const achievements = [];
+    if (stats.testsCompleted >= 1) achievements.push('🥇');
+    if (stats.testsCompleted >= 5) achievements.push('🏅');
+    if (stats.averageScore >= 90) achievements.push('⭐');
+    if (stats.studyTime >= 1800) achievements.push('📚');
+
+    if (achievements.length === 0) {
+        return '<span class="no-achievements">Completează teste pentru a debloca realizări!</span>';
+    }
+    return achievements.map(a => `<span class="achievement-mini">${a}</span>`).join('');
+}
+
+function updateProgressDashboard() {
+    // Update floating progress indicator if exists
+    const indicator = document.getElementById('progressIndicator');
+    if (indicator) {
+        const data = getPlayerData();
+        const level = getCurrentLevel(data.xp);
+        indicator.innerHTML = `${level.name.split(' ')[0]} ${data.xp} XP`;
+    }
+}
+
+// ===============================
+// 🔖 BOOKMARKS SYSTEM
+// ===============================
+function toggleBookmark(chapterId) {
+    const data = getPlayerData();
+    const index = data.bookmarks.indexOf(chapterId);
+
+    if (index === -1) {
+        data.bookmarks.push(chapterId);
+        showToast('Marcaj adăugat! 🔖', 'success');
+    } else {
+        data.bookmarks.splice(index, 1);
+        showToast('Marcaj eliminat', 'info');
+    }
+
+    savePlayerData(data);
+    updateBookmarkButtons();
+}
+
+function isBookmarked(chapterId) {
+    const data = getPlayerData();
+    return data.bookmarks.includes(chapterId);
+}
+
+function updateBookmarkButtons() {
+    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+        const chapterId = btn.dataset.chapter;
+        if (isBookmarked(chapterId)) {
+            btn.classList.add('active');
+            btn.innerHTML = '🔖';
+        } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '📑';
+        }
+    });
+}
+
+// ===============================
+// 🌈 THEME SYSTEM
+// ===============================
+const THEMES = {
+    default: { primary: '#3b82f6', accent: '#10b981', name: '💙 Albastru' },
+    purple: { primary: '#8b5cf6', accent: '#ec4899', name: '💜 Violet' },
+    orange: { primary: '#f97316', accent: '#eab308', name: '🧡 Portocaliu' },
+    green: { primary: '#10b981', accent: '#14b8a6', name: '💚 Verde' },
+    red: { primary: '#ef4444', accent: '#f97316', name: '❤️ Roșu' }
+};
+
+function setTheme(themeName) {
+    const theme = THEMES[themeName] || THEMES.default;
+    document.documentElement.style.setProperty('--primary', theme.primary);
+    document.documentElement.style.setProperty('--accent', theme.accent);
+    localStorage.setItem('selectedTheme', themeName);
+    showToast(`Temă schimbată: ${theme.name}`, 'success');
+}
+
+function openThemeSelector() {
+    const modal = document.createElement('div');
+    modal.className = 'theme-modal';
+    modal.id = 'themeModal';
+    modal.innerHTML = `
+        <div class="theme-content">
+            <h3>🌈 Alege Tema</h3>
+            <div class="theme-grid">
+                ${Object.entries(THEMES).map(([key, theme]) => `
+                    <button class="theme-btn" onclick="setTheme('${key}'); closeThemeModal();" 
+                            style="background: linear-gradient(135deg, ${theme.primary}, ${theme.accent})">
+                        ${theme.name}
+                    </button>
+                `).join('')}
+            </div>
+            <button class="btn" onclick="closeThemeModal()">Închide</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function closeThemeModal() {
+    const modal = document.getElementById('themeModal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+// Initialize theme
+const savedTheme = localStorage.getItem('selectedTheme');
+if (savedTheme) setTheme(savedTheme);
+
+// ===============================
+// 🎯 ENHANCED TEST COMPLETION
+// ===============================
+const gamifiedSubmitTest = submitTest;
+submitTest = function () {
+    const result = gamifiedSubmitTest();
+
+    // Calculate score
+    let correctCount = 0;
+    testQuestions.forEach((question, index) => {
+        if (userAnswers[index] === question.correct) {
+            correctCount++;
+        }
+    });
+
+    const percentage = Math.round((correctCount / testQuestions.length) * 100);
+
+    // Add XP
+    const xpEarned = (correctCount * LEVEL_CONFIG.xpPerCorrectAnswer) + LEVEL_CONFIG.xpPerTestComplete;
+    addXP(xpEarned, `Test ${currentTest}`);
+
+    // Celebrate
+    celebrateTestComplete(percentage);
+
+    // Daily challenge check
+    if (percentage >= 80) {
+        const data = getPlayerData();
+        const today = new Date().toDateString();
+        if (data.lastPlayDate !== today) {
+            addXP(50, 'Provocare zilnică!');
+            data.lastPlayDate = today;
+            savePlayerData(data);
+        }
+    }
+};
+
+// ===============================
+// 🎮 INITIALIZE GAMIFICATION
+// ===============================
+function initGamification() {
+    // Add progress indicator to toolbar
+    const toolbar = document.querySelector('.floating-toolbar');
+    if (toolbar) {
+        const progressBtn = document.createElement('button');
+        progressBtn.className = 'toolbar-btn';
+        progressBtn.id = 'progressIndicator';
+        progressBtn.onclick = openDashboard;
+        const data = getPlayerData();
+        const level = getCurrentLevel(data.xp);
+        progressBtn.innerHTML = `
+            <span class="toolbar-icon">${level.name.split(' ')[0]}</span>
+            <span class="toolbar-label">${data.xp} XP</span>
+        `;
+        toolbar.insertBefore(progressBtn, toolbar.firstChild);
+
+        // Add theme button
+        const themeBtn = document.createElement('button');
+        themeBtn.className = 'toolbar-btn';
+        themeBtn.onclick = openThemeSelector;
+        themeBtn.innerHTML = `
+            <span class="toolbar-icon">🌈</span>
+            <span class="toolbar-label">Temă</span>
+        `;
+        toolbar.appendChild(themeBtn);
+    }
+
+    // Add bookmark buttons to chapters
+    document.querySelectorAll('.chapter-card').forEach(card => {
+        const chapterId = card.dataset.chapter;
+        if (chapterId) {
+            const bookmarkBtn = document.createElement('button');
+            bookmarkBtn.className = 'bookmark-btn';
+            bookmarkBtn.dataset.chapter = chapterId;
+            bookmarkBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleBookmark(chapterId);
+            };
+            bookmarkBtn.innerHTML = isBookmarked(chapterId) ? '🔖' : '📑';
+            if (isBookmarked(chapterId)) bookmarkBtn.classList.add('active');
+            card.querySelector('.chapter-header').appendChild(bookmarkBtn);
+        }
+    });
+
+    // Track chapter reading
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const chapterId = entry.target.dataset.chapter;
+                const data = getPlayerData();
+                if (chapterId && !data.chaptersRead.includes(chapterId)) {
+                    data.chaptersRead.push(chapterId);
+                    savePlayerData(data);
+                    addXP(LEVEL_CONFIG.xpPerChapterRead, 'Capitol citit');
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.chapter-card').forEach(card => {
+        observer.observe(card);
+    });
+}
+
+// Run initialization
+document.addEventListener('DOMContentLoaded', initGamification);
+if (document.readyState !== 'loading') {
+    initGamification();
+}
+
+console.log('🎮 Sistem de gamificare activat!');

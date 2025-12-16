@@ -2811,3 +2811,478 @@ body.dark-mode .ppe-image {
         height: 120px;
     }
 }
+
+/* ===============================
+   🎮 GAMIFICATION STYLES
+   =============================== */
+
+/* XP Notification */
+.xp-notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+    z-index: 9999;
+    transform: translateX(150%);
+    transition: transform 0.3s ease;
+}
+
+.xp-notification.show {
+    transform: translateX(0);
+}
+
+.xp-reason {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: normal;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    top: -20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    z-index: 9998;
+    animation: confettiFall 3s ease-out forwards;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Level Up Modal */
+.level-up-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.level-up-modal.show {
+    opacity: 1;
+}
+
+.level-up-content {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    padding: 3rem;
+    border-radius: 2rem;
+    text-align: center;
+    animation: levelUpBounce 0.5s ease;
+    box-shadow: 0 0 100px rgba(139, 92, 246, 0.5);
+}
+
+@keyframes levelUpBounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.level-up-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: shake 0.5s ease infinite;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+}
+
+.level-up-content h2 {
+    color: #eab308;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+}
+
+.level-up-content h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.level-up-content p {
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+}
+
+/* Dashboard Modal */
+.dashboard-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dashboard-modal.show {
+    opacity: 1;
+}
+
+.dashboard-content {
+    background: white;
+    border-radius: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+body.dark-mode .dashboard-content {
+    background: #1e293b;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.dark-mode .dashboard-header {
+    border-color: #334155;
+}
+
+.dashboard-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.dashboard-body {
+    padding: 1.5rem;
+}
+
+/* Level Card */
+.level-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border-radius: 1rem;
+    border-left: 5px solid;
+    margin-bottom: 1.5rem;
+}
+
+body.dark-mode .level-card {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+}
+
+.level-icon {
+    font-size: 3rem;
+}
+
+.level-info {
+    flex: 1;
+}
+
+.level-info h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.xp-bar {
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+body.dark-mode .xp-bar {
+    background: #475569;
+}
+
+.xp-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.level-info p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* Quick Stats */
+.stats-quick {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.stats-quick .stat-item {
+    text-align: center;
+    padding: 1rem 0.5rem;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+}
+
+body.dark-mode .stats-quick .stat-item {
+    background: #0f172a;
+}
+
+.stats-quick .stat-icon {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.stats-quick .stat-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--primary, #3b82f6);
+}
+
+.stats-quick .stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Daily Challenge */
+.daily-challenge {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+body.dark-mode .daily-challenge {
+    background: linear-gradient(135deg, #78350f, #92400e);
+}
+
+.daily-challenge h4 {
+    margin: 0 0 0.5rem;
+    color: #92400e;
+}
+
+body.dark-mode .daily-challenge h4 {
+    color: #fde68a;
+}
+
+.daily-challenge p {
+    margin: 0 0 0.5rem;
+    color: #78350f;
+    font-size: 0.875rem;
+}
+
+body.dark-mode .daily-challenge p {
+    color: #fef3c7;
+}
+
+.challenge-reward {
+    display: inline-block;
+    background: #eab308;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+/* Achievements Preview */
+.achievements-preview h4 {
+    margin: 0 0 0.75rem;
+}
+
+.achievements-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.achievement-mini {
+    font-size: 2rem;
+    background: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+body.dark-mode .achievement-mini {
+    background: #0f172a;
+}
+
+.no-achievements {
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+/* Theme Modal */
+.theme-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.theme-modal.show {
+    opacity: 1;
+}
+
+.theme-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+}
+
+body.dark-mode .theme-content {
+    background: #1e293b;
+}
+
+.theme-content h3 {
+    margin: 0 0 1.5rem;
+}
+
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.theme-btn {
+    padding: 1rem;
+    border: none;
+    border-radius: 1rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.theme-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Bookmark Button */
+.bookmark-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.bookmark-btn:hover,
+.bookmark-btn.active {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.chapter-header {
+    position: relative;
+}
+
+/* Mobile Gamification */
+@media (max-width: 600px) {
+    .xp-notification {
+        right: 10px;
+        left: 10px;
+        text-align: center;
+    }
+
+    .level-up-content {
+        padding: 2rem;
+        margin: 1rem;
+    }
+
+    .level-up-icon {
+        font-size: 3rem;
+    }
+
+    .level-up-content h2 {
+        font-size: 1.75rem;
+    }
+
+    .stats-quick {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .theme-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .level-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
