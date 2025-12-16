@@ -108,79 +108,308 @@
 
             <div class="chapters-grid">
                 <!-- Capitol 1.1 -->
-                <div class="chapter-card" data-chapter="1.1">
+                <div class="chapter-card full-width" data-chapter="1.1">
                     <div class="chapter-header">
                         <span class="chapter-number">1.1</span>
                         <h3>Alegerea Scării de Reprezentare</h3>
                     </div>
                     <div class="chapter-content">
                         <div class="theory-box">
-                            <h4>📐 Noțiuni Teoretice</h4>
-                            <p><strong>Scara de reprezentare</strong> este raportul dintre dimensiunile din desen și
-                                dimensiunile reale ale obiectului.</p>
+                            <h4>📐 Definiție și Noțiuni Fundamentale</h4>
+                            <p><strong>Scara de reprezentare</strong> este raportul matematic dintre dimensiunile
+                                liniare din desenul tehnic și dimensiunile corespunzătoare ale obiectului real. Se
+                                notează sub forma <strong>SCARA X:Y</strong>, unde X reprezintă dimensiunea din desen și
+                                Y dimensiunea reală.</p>
+                            <p><strong>Importanța alegerii scării:</strong></p>
                             <ul>
-                                <li><strong>Scări de mărire:</strong> 2:1, 5:1, 10:1 - pentru piese mici</li>
-                                <li><strong>Scara naturală:</strong> 1:1 - dimensiuni reale</li>
-                                <li><strong>Scări de micșorare:</strong> 1:2, 1:5, 1:10 - pentru piese mari</li>
+                                <li>Permite reprezentarea clară a pieselor de orice dimensiune pe foi standardizate</li>
+                                <li>Asigură lizibilitatea detalielor constructive</li>
+                                <li>Facilitează cotarea corectă și verificarea dimensiunilor</li>
+                                <li>Respectă standardele internaționale (ISO 5455, STAS 103)</li>
                             </ul>
                         </div>
+
+                        <div class="theory-box">
+                            <h4>📊 Clasificarea Scărilor de Reprezentare</h4>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tip Scară</th>
+                                        <th>Raport</th>
+                                        <th>Utilizare</th>
+                                        <th>Exemple Practice</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Scări de mărire</strong></td>
+                                        <td>2:1, 5:1, 10:1, 20:1, 50:1</td>
+                                        <td>Piese mici, detalii fine</td>
+                                        <td>Ceasuri, electronice, bijuterii</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Scara naturală</strong></td>
+                                        <td>1:1</td>
+                                        <td>Dimensiuni reale</td>
+                                        <td>Piese medii, executate pe CNC</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Scări de micșorare</strong></td>
+                                        <td>1:2, 1:5, 1:10, 1:20, 1:50, 1:100</td>
+                                        <td>Piese mari, ansambluri</td>
+                                        <td>Mașini, construcții, hale</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="formula-box highlight">
+                            <h5>📝 Formula de Calcul</h5>
+                            <p class="formula">Dimensiune desen = Dimensiune reală × Scara</p>
+                            <p class="formula-note">Exemplu: Pentru o piesă de 100mm la scara 1:2 → Desen = 100 × 0.5 =
+                                50mm</p>
+                        </div>
+
                         <div class="diagram-box">
-                            <h4>📊 Scări Standardizate (STAS)</h4>
-                            <svg viewBox="0 0 400 200" class="scale-diagram">
-                                <rect x="20" y="40" width="60" height="60" fill="#3182ce" opacity="0.3" stroke="#3182ce"
+                            <h4>📊 Comparație Vizuală a Scărilor (Standard ISO 5455)</h4>
+                            <svg viewBox="0 0 500 250" class="scale-diagram">
+                                <!-- Background grid -->
+                                <defs>
+                                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e2e8f0" stroke-width="0.5" />
+                                    </pattern>
+                                </defs>
+                                <rect width="500" height="250" fill="url(#grid)" />
+
+                                <!-- Original piece reference -->
+                                <rect x="20" y="80" width="80" height="80" fill="#3b82f6" opacity="0.3" stroke="#3b82f6"
                                     stroke-width="2" />
-                                <text x="50" y="120" text-anchor="middle" fill="#2d3748" font-size="12">1:1</text>
-                                <rect x="120" y="50" width="40" height="40" fill="#38a169" opacity="0.3"
-                                    stroke="#38a169" stroke-width="2" />
-                                <text x="140" y="120" text-anchor="middle" fill="#2d3748" font-size="12">1:2</text>
-                                <rect x="200" y="20" width="100" height="100" fill="#e53e3e" opacity="0.3"
-                                    stroke="#e53e3e" stroke-width="2" />
-                                <text x="250" y="140" text-anchor="middle" fill="#2d3748" font-size="12">2:1</text>
-                                <rect x="320" y="60" width="30" height="30" fill="#805ad5" opacity="0.3"
-                                    stroke="#805ad5" stroke-width="2" />
-                                <text x="335" y="120" text-anchor="middle" fill="#2d3748" font-size="12">1:5</text>
+                                <text x="60" y="180" text-anchor="middle" fill="#1e40af" font-size="11"
+                                    font-weight="bold">1:1</text>
+                                <text x="60" y="195" text-anchor="middle" fill="#64748b" font-size="9">(Original)</text>
+
+                                <!-- Scale 1:2 -->
+                                <rect x="130" y="100" width="40" height="40" fill="#10b981" opacity="0.3"
+                                    stroke="#10b981" stroke-width="2" />
+                                <text x="150" y="180" text-anchor="middle" fill="#059669" font-size="11"
+                                    font-weight="bold">1:2</text>
+                                <text x="150" y="195" text-anchor="middle" fill="#64748b"
+                                    font-size="9">(Micșorare)</text>
+
+                                <!-- Scale 2:1 -->
+                                <rect x="200" y="40" width="160" height="160" fill="#f97316" opacity="0.3"
+                                    stroke="#f97316" stroke-width="2" />
+                                <text x="280" y="220" text-anchor="middle" fill="#ea580c" font-size="11"
+                                    font-weight="bold">2:1</text>
+                                <text x="280" y="235" text-anchor="middle" fill="#64748b" font-size="9">(Mărire)</text>
+
+                                <!-- Scale 1:4 -->
+                                <rect x="390" y="110" width="20" height="20" fill="#8b5cf6" opacity="0.3"
+                                    stroke="#8b5cf6" stroke-width="2" />
+                                <text x="400" y="180" text-anchor="middle" fill="#7c3aed" font-size="11"
+                                    font-weight="bold">1:4</text>
+                                <text x="400" y="195" text-anchor="middle" fill="#64748b"
+                                    font-size="9">(Micșorare)</text>
+
+                                <!-- Measurements -->
+                                <line x1="20" y1="70" x2="100" y2="70" stroke="#334155" stroke-width="1" />
+                                <text x="60" y="65" text-anchor="middle" fill="#334155" font-size="10">80mm real</text>
                             </svg>
+                        </div>
+
+                        <div class="theory-box">
+                            <h4>⚙️ Reguli Practice pentru Alegerea Scării</h4>
+                            <ul class="detailed-list">
+                                <li><strong>Piese sub 10mm:</strong> Se folosesc scări de mărire (5:1, 10:1) pentru
+                                    vizibilitate</li>
+                                <li><strong>Piese 10-500mm:</strong> Scara 1:1 sau 1:2 pe formate A3/A4</li>
+                                <li><strong>Piese peste 500mm:</strong> Scări de micșorare (1:5, 1:10, 1:20)</li>
+                                <li><strong>Construcții și hale:</strong> Scări foarte mici (1:50, 1:100, 1:200)</li>
+                                <li><strong>Detalii pe același desen:</strong> Se pot folosi scări diferite, indicate
+                                    separat</li>
+                            </ul>
+                        </div>
+
+                        <div class="theory-box">
+                            <h4>📋 Indicarea Scării în Desen (conform ISO)</h4>
+                            <p>Scara se înscrie în <strong>cartușul desenului</strong> (colțul din dreapta jos). Dacă se
+                                folosesc mai multe scări, scara principală se trece în cartuș, iar celelalte lângă
+                                vederea respectivă.</p>
+                            <p><strong>Format corect:</strong> SCARA 1:2 sau SCARA 2:1</p>
                         </div>
                     </div>
                     <button class="expand-btn">Vezi Detalii Complete</button>
                 </div>
 
                 <!-- Capitol 1.2 -->
-                <div class="chapter-card" data-chapter="1.2">
+                <div class="chapter-card full-width" data-chapter="1.2">
                     <div class="chapter-header">
                         <span class="chapter-number">1.2</span>
-                        <h3>Reguli de Cotare și Notare</h3>
+                        <h3>Reguli de Cotare și Notare în Desenul Tehnic</h3>
                     </div>
                     <div class="chapter-content">
                         <div class="theory-box">
-                            <h4>📏 Elemente de Cotare</h4>
+                            <h4>📏 Definiție și Importanță</h4>
+                            <p><strong>Cotarea</strong> reprezintă înscrierea dimensiunilor pe un desen tehnic, astfel
+                                încât piesa să poată fi executată fără alte calcule. Conform <strong>SR ISO
+                                    129</strong>, cotarea trebuie să fie completă, clară și corectă.</p>
+                            <p><strong>Principii fundamentale:</strong></p>
                             <ul>
-                                <li><strong>Linia de cotă</strong> - linie subțire cu săgeți la capete</li>
-                                <li><strong>Linii ajutătoare</strong> - perpendiculare pe contur</li>
-                                <li><strong>Cifra de cotă</strong> - dimensiunea în mm</li>
-                                <li><strong>Simboluri speciale</strong> - Ø, R, □, etc.</li>
+                                <li>Fiecare dimensiune se cotează o singură dată</li>
+                                <li>Cotele se exprimă în <strong>milimetri</strong> (fără a scrie "mm")</li>
+                                <li>Dimensiunile se referă la piesa finită</li>
+                                <li>Se cotează forma finală, nu operațiile de prelucrare</li>
                             </ul>
                         </div>
+
+                        <div class="theory-box">
+                            <h4>📐 Elementele Cotării (conform ISO)</h4>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Element</th>
+                                        <th>Descriere</th>
+                                        <th>Caracteristici</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Linia de cotă</strong></td>
+                                        <td>Linie subțire cu săgeți la capete</td>
+                                        <td>Paralelă cu dimensiunea cotată, la 8-10mm de contur</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Liniile ajutătoare</strong></td>
+                                        <td>Perpendiculare pe linia de cotă</td>
+                                        <td>Se trasează din contur, depășesc 2-3mm linia de cotă</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cifra de cotă</strong></td>
+                                        <td>Valoarea dimensiunii</td>
+                                        <td>Înălțime 3.5mm, plasată deasupra liniei de cotă</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Extremități</strong></td>
+                                        <td>Săgeți, puncte sau linii oblice</td>
+                                        <td>Săgeți: unghi 15-30°, lungime 3-5mm</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="theory-box">
+                            <h4>🔣 Simboluri Speciale pentru Cotare</h4>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Simbol</th>
+                                        <th>Semnificație</th>
+                                        <th>Exemplu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Ø</strong></td>
+                                        <td>Diametru</td>
+                                        <td>Ø50 (diametru 50mm)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>R</strong></td>
+                                        <td>Rază</td>
+                                        <td>R10 (rază 10mm)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>□</strong></td>
+                                        <td>Secțiune pătrată</td>
+                                        <td>□25 (pătrat cu latura 25mm)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>⌀</strong></td>
+                                        <td>Diametru sferic</td>
+                                        <td>S⌀30</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SR</strong></td>
+                                        <td>Rază sferică</td>
+                                        <td>SR15</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>×</strong></td>
+                                        <td>Înmulțire (număr elemente)</td>
+                                        <td>4×Ø8 (4 găuri de Ø8)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                         <div class="diagram-box">
-                            <h4>Exemplu de Cotare</h4>
-                            <svg viewBox="0 0 400 180" class="dimension-diagram">
-                                <rect x="100" y="50" width="200" height="80" fill="none" stroke="#2d3748"
-                                    stroke-width="2" />
-                                <line x1="100" y1="150" x2="100" y2="170" stroke="#e53e3e" stroke-width="1" />
-                                <line x1="300" y1="150" x2="300" y2="170" stroke="#e53e3e" stroke-width="1" />
-                                <line x1="100" y1="160" x2="300" y2="160" stroke="#e53e3e" stroke-width="1" />
-                                <polygon points="100,160 108,157 108,163" fill="#e53e3e" />
-                                <polygon points="300,160 292,157 292,163" fill="#e53e3e" />
-                                <text x="200" y="155" text-anchor="middle" fill="#e53e3e" font-size="14"
+                            <h4>📊 Exemplu Complet de Cotare</h4>
+                            <svg viewBox="0 0 500 220" class="dimension-diagram">
+                                <!-- Background -->
+                                <rect width="500" height="220" fill="#f8fafc" />
+
+                                <!-- Main piece -->
+                                <rect x="120" y="50" width="200" height="100" fill="none" stroke="#1e293b"
+                                    stroke-width="2.5" />
+
+                                <!-- Hole -->
+                                <circle cx="220" cy="100" r="20" fill="none" stroke="#1e293b" stroke-width="2" />
+                                <line x1="206" y1="100" x2="234" y2="100" stroke="#1e293b" stroke-width="0.5" />
+                                <line x1="220" y1="86" x2="220" y2="114" stroke="#1e293b" stroke-width="0.5" />
+
+                                <!-- Horizontal dimension (width) -->
+                                <line x1="120" y1="170" x2="120" y2="190" stroke="#3b82f6" stroke-width="1" />
+                                <line x1="320" y1="170" x2="320" y2="190" stroke="#3b82f6" stroke-width="1" />
+                                <line x1="120" y1="180" x2="320" y2="180" stroke="#3b82f6" stroke-width="1" />
+                                <polygon points="120,180 130,177 130,183" fill="#3b82f6" />
+                                <polygon points="320,180 310,177 310,183" fill="#3b82f6" />
+                                <text x="220" y="176" text-anchor="middle" fill="#1e40af" font-size="14"
                                     font-weight="bold">200</text>
-                                <line x1="80" y1="50" x2="60" y2="50" stroke="#3182ce" stroke-width="1" />
-                                <line x1="80" y1="130" x2="60" y2="130" stroke="#3182ce" stroke-width="1" />
-                                <line x1="70" y1="50" x2="70" y2="130" stroke="#3182ce" stroke-width="1" />
-                                <polygon points="70,50 67,58 73,58" fill="#3182ce" />
-                                <polygon points="70,130 67,122 73,122" fill="#3182ce" />
-                                <text x="55" y="95" text-anchor="middle" fill="#3182ce" font-size="14"
-                                    font-weight="bold" transform="rotate(-90,55,95)">80</text>
+
+                                <!-- Vertical dimension (height) -->
+                                <line x1="90" y1="50" x2="70" y2="50" stroke="#10b981" stroke-width="1" />
+                                <line x1="90" y1="150" x2="70" y2="150" stroke="#10b981" stroke-width="1" />
+                                <line x1="80" y1="50" x2="80" y2="150" stroke="#10b981" stroke-width="1" />
+                                <polygon points="80,50 77,60 83,60" fill="#10b981" />
+                                <polygon points="80,150 77,140 83,140" fill="#10b981" />
+                                <text x="65" y="105" text-anchor="middle" fill="#059669" font-size="14"
+                                    font-weight="bold" transform="rotate(-90,65,105)">100</text>
+
+                                <!-- Hole diameter -->
+                                <line x1="220" y1="85" x2="220" y2="30" stroke="#f97316" stroke-width="1" />
+                                <line x1="220" y1="30" x2="280" y2="30" stroke="#f97316" stroke-width="1" />
+                                <text x="285" y="34" fill="#ea580c" font-size="13" font-weight="bold">Ø40</text>
+
+                                <!-- Hole position -->
+                                <line x1="120" y1="100" x2="200" y2="100" stroke="#8b5cf6" stroke-width="1"
+                                    stroke-dasharray="3,2" />
+                                <text x="160" y="96" text-anchor="middle" fill="#7c3aed" font-size="11">100</text>
+
+                                <!-- Labels -->
+                                <text x="400" y="50" fill="#64748b" font-size="10">Linie de cotă</text>
+                                <line x1="320" y1="180" x2="390" y2="55" stroke="#64748b" stroke-width="0.5"
+                                    stroke-dasharray="2,2" />
+
+                                <text x="400" y="150" fill="#64748b" font-size="10">Linii ajutătoare</text>
+                                <line x1="320" y1="175" x2="390" y2="145" stroke="#64748b" stroke-width="0.5"
+                                    stroke-dasharray="2,2" />
                             </svg>
+                        </div>
+
+                        <div class="theory-box">
+                            <h4>⚠️ Reguli Importante de Cotare</h4>
+                            <ul class="detailed-list">
+                                <li><strong>Nu se cotează pe contur:</strong> Cifrele se plasează pe linia de cotă, nu
+                                    pe liniile piesei</li>
+                                <li><strong>Citire de jos sau dreapta:</strong> Cifrele se orientează pentru citire din
+                                    aceste direcții</li>
+                                <li><strong>Distanțe uniforme:</strong> Liniile de cotă paralele se plasează la distanțe
+                                    egale (8-10mm)</li>
+                                <li><strong>Cotele mici întâi:</strong> Cotele mici se pun mai aproape de piesă, cele
+                                    mari mai departe</li>
+                                <li><strong>Evitarea încrucișărilor:</strong> Liniile de cotă nu trebuie să se
+                                    încrucișeze</li>
+                            </ul>
                         </div>
                     </div>
                     <button class="expand-btn">Vezi Detalii Complete</button>
