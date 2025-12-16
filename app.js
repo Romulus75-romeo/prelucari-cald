@@ -333,6 +333,66 @@ function shuffleArray(array) {
 }
 
 // ===============================
+// TIMER FUNCTIONALITY
+// ===============================
+let timerInterval;
+let timeLeft;
+const TEST_DURATIONS = {
+    desen: 15 * 60, // 15 minutes
+    sudura: 20 * 60, // 20 minutes
+    ssm: 15 * 60,   // 15 minutes
+    final: 45 * 60   // 45 minutes
+};
+
+function startTestTimer(duration) {
+    const timerDisplay = document.getElementById('testTimer');
+    if (!timerDisplay) return;
+
+    timerDisplay.style.display = 'flex';
+    timerDisplay.classList.remove('warning');
+    timeLeft = duration;
+    updateTimerDisplay();
+
+    // Clear any existing timer
+    if (timerInterval) clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            submitTest();
+            // showToast function might not be defined universally, so check or just alert/console
+            if (typeof showToast === 'function') {
+                showToast('Timpul a expirat! Testul a fost trimis automat.', 'warning');
+            } else {
+                alert('Timpul a expirat! Testul a fost trimis automat.');
+            }
+        } else if (timeLeft <= 60) {
+            timerDisplay.classList.add('warning');
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    const timerDisplay = document.getElementById('testTimer');
+    if (timerDisplay) {
+        timerDisplay.style.display = 'none';
+        timerDisplay.classList.remove('warning');
+    }
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const timerDisplay = document.getElementById('testTimer');
+    if (timerDisplay) timerDisplay.textContent = `⏱️ ${display}`;
+}
+
+// ===============================
 // TEST FUNCTIONALITY
 // ===============================
 let currentTest = null;
@@ -364,6 +424,13 @@ function startTest(testType) {
 
     // Show first question
     showQuestion(0);
+
+    // Start Timer
+    if (TEST_DURATIONS[testType]) {
+        startTestTimer(TEST_DURATIONS[testType]);
+    } else {
+        startTestTimer(15 * 60); // Default 15 min
+    }
 }
 
 function showQuestion(index) {
@@ -424,6 +491,7 @@ function prevQuestion() {
 }
 
 function submitTest() {
+    stopTimer();
     // Calculate score
     let correctCount = 0;
     testQuestions.forEach((question, index) => {
@@ -467,6 +535,7 @@ function submitTest() {
 }
 
 function closeTest() {
+    stopTimer();
     document.getElementById('testModal').classList.remove('active');
     currentTest = null;
 

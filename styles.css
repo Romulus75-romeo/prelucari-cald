@@ -1313,6 +1313,39 @@ body.dark-mode .electrode-table td {
     font-size: 1.5rem;
 }
 
+.test-timer {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    color: white;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.test-timer.warning {
+    background: rgba(239, 68, 68, 0.4);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .close-btn {
     background: none;
     border: none;
