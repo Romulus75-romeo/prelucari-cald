@@ -1623,3 +1623,14 @@ if (document.readyState !== 'loading') {
 }
 
 console.log('🎮 Sistem de gamificare activat!');
+
+// ===============================
+// 📱 PWA SERVICE WORKER
+// ===============================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('✅ Service Worker înregistrat:', reg.scope))
+            .catch(err => console.log('❌ Eroare Service Worker:', err));
+    });
+}
