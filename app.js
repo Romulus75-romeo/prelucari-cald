@@ -1747,22 +1747,35 @@ function generateWorksheet(type) {
         </div>
     `;
 
+    // Style container to be off-screen but visible to renderer
+    container.style.position = 'fixed';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.width = '210mm'; // A4 width
+    container.style.background = 'white';
+    document.body.appendChild(container);
+
     // Options for PDF
     const opt = {
-        margin: 0.5,
+        margin: 10,
         filename: `${type}_fisa_lucru.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     // Generate
     html2pdf().set(opt).from(container).save().then(() => {
+        document.body.removeChild(container); // Cleanup
         if (typeof showToast === 'function') {
             showToast('Fișa de lucru a fost descărcată! 📥', 'success');
         } else {
             alert('Fișa de lucru a fost descărcată!');
         }
+    }).catch(err => {
+        document.body.removeChild(container); // Cleanup on error
+        console.error(err);
+        alert('Eroare la generarea PDF.');
     });
 }
 
