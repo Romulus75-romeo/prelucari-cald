@@ -1634,3 +1634,37 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.log('❌ Eroare Service Worker:', err));
     });
 }
+
+// ===============================
+// PDF EXPORT
+// ===============================
+function exportPDF() {
+    const element = document.getElementById('testResults');
+    const opt = {
+        margin: 0.5,
+        filename: 'Diploma_Prelucrari_Cald.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Temporarily hide buttons for export
+    const buttons = element.querySelector('.results-actions');
+    const originalDisplay = buttons ? buttons.style.display : '';
+    if (buttons) buttons.style.display = 'none';
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Restore buttons
+        if (buttons) buttons.style.display = originalDisplay;
+        // showToast function should be available
+        if (typeof showToast === 'function') {
+            showToast('PDF exportat cu succes! 📄', 'success');
+        } else {
+            alert('PDF exportat cu succes!');
+        }
+    }).catch(err => {
+        console.error(err);
+        if (buttons) buttons.style.display = originalDisplay;
+        alert('Eroare la exportul PDF. Încearcă din nou.');
+    });
+}
