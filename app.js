@@ -591,16 +591,6 @@ document.getElementById('testModal')?.addEventListener('click', (e) => {
     }
 });
 
-// ===============================
-// CHAPTER EXPAND FUNCTIONALITY
-// ===============================
-document.querySelectorAll('.expand-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-        const card = this.closest('.chapter-card');
-        card.classList.toggle('expanded');
-        this.textContent = card.classList.contains('expanded') ? 'Ascunde Detalii' : 'Vezi Detalii Complete';
-    });
-});
 
 // ===============================
 // SMOOTH SCROLL FOR ANCHOR LINKS
