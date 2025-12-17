@@ -1747,12 +1747,15 @@ function generateWorksheet(type) {
         </div>
     `;
 
-    // Style container to be off-screen but visible to renderer
-    container.style.position = 'fixed';
-    container.style.left = '-9999px';
+    // Style container to be invisible but on-screen for proper rendering
+    container.style.position = 'absolute';
+    container.style.left = '0';
     container.style.top = '0';
     container.style.width = '210mm'; // A4 width
     container.style.background = 'white';
+    container.style.opacity = '0';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '-1';
     document.body.appendChild(container);
 
     // Options for PDF
@@ -1760,23 +1763,25 @@ function generateWorksheet(type) {
         margin: 10,
         filename: `${type}_fisa_lucru.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
+        html2canvas: { scale: 2, logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // Generate
-    html2pdf().set(opt).from(container).save().then(() => {
-        document.body.removeChild(container); // Cleanup
-        if (typeof showToast === 'function') {
-            showToast('Fișa de lucru a fost descărcată! 📥', 'success');
-        } else {
-            alert('Fișa de lucru a fost descărcată!');
-        }
-    }).catch(err => {
-        document.body.removeChild(container); // Cleanup on error
-        console.error(err);
-        alert('Eroare la generarea PDF.');
-    });
+    // Wait for rendering then generate
+    setTimeout(() => {
+        html2pdf().set(opt).from(container).save().then(() => {
+            document.body.removeChild(container); // Cleanup
+            if (typeof showToast === 'function') {
+                showToast('Fișa de lucru a fost descărcată! 📥', 'success');
+            } else {
+                alert('Fișa de lucru a fost descărcată!');
+            }
+        }).catch(err => {
+            document.body.removeChild(container); // Cleanup on error
+            console.error('PDF Generation Error:', err);
+            alert('Eroare la generarea PDF.');
+        });
+    }, 100); // Small delay to ensure DOM rendering
 }
 
 // ===============================
