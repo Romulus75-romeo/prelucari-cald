@@ -520,18 +520,59 @@ function submitTest() {
     // Update score display
     document.getElementById('resultScore').textContent = `${percentage}%`;
 
-    // Generate details
+    // Generate details with question feedback
     let gradeText = '';
     if (percentage >= 90) gradeText = 'Excelent! 🏆';
     else if (percentage >= 70) gradeText = 'Foarte bine! 👍';
     else if (percentage >= 50) gradeText = 'Bine! Continuă să înveți! 📚';
     else gradeText = 'Mai trebuie să studiezi! 💪';
 
-    document.getElementById('resultDetails').innerHTML = `
+    // Build detailed feedback
+    let feedbackHTML = `
         <p><strong>${gradeText}</strong></p>
         <p>Răspunsuri corecte: ${correctCount} din ${testQuestions.length}</p>
         <p>Nota: ${Math.round(percentage / 10)}</p>
+        <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+        <h3 style="margin-top: 20px; font-size: 1.1rem;">📋 Răspunsurile tale:</h3>
+        <div class="feedback-list" style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
     `;
+
+    testQuestions.forEach((question, index) => {
+        const userAns = userAnswers[index];
+        const isCorrect = userAns === question.correct;
+        const icon = isCorrect ? '✅' : '❌';
+        const colorClass = isCorrect ? 'correct' : 'incorrect';
+
+        feedbackHTML += `
+            <div class="feedback-item ${colorClass}" style="
+                padding: 10px;
+                margin: 10px 0;
+                border-left: 4px solid ${isCorrect ? '#22c55e' : '#ef4444'};
+                background: ${isCorrect ? '#f0fdf4' : '#fef2f2'};
+                border-radius: 4px;
+            ">
+                <p style="margin: 0 0 5px; font-weight: bold;">${icon} ${question.question}</p>
+                <p style="margin: 5px 0; font-size: 0.9rem;">
+                    ${isCorrect ?
+                `<span style="color: #166534;">Răspuns corect: ${question.answers[question.correct]}</span>` :
+                `<span style="color: #991b1b;">Răspuns corect: ${question.answers[question.correct]}</span><br>
+                         <span style="color: #666;">Tu ai ales: ${userAns !== undefined ? question.answers[userAns] : 'Niciun răspuns'}</span>`
+            }
+                </p>
+            </div>
+        `;
+    });
+
+    feedbackHTML += '</div>';
+    document.getElementById('resultDetails').innerHTML = feedbackHTML;
+
+    // Save test stats for certificate check
+    const stats = JSON.parse(localStorage.getItem('testStats') || '{}');
+    stats[currentTest] = percentage;
+    localStorage.setItem('testStats', JSON.stringify(stats));
+
+    // Check if eligible for certificate
+    setTimeout(() => checkAndOfferCertificate(), 1000);
 }
 
 function closeTest() {
@@ -1954,3 +1995,234 @@ function resetGame() {
 
 // Init when section visible or on load
 document.addEventListener('DOMContentLoaded', initGame);
+
+// ===============================
+// WELDING PARAMETERS CALCULATOR  
+// ===============================
+function calculateWeldingParams() {
+    const diameter = parseFloat(document.getElementById('electrodDiameter').value);
+    const thickness = parseFloat(document.getElementById('tableThickness').value);
+    const material = document.getElementById('materialType').value;
+
+    if (!diameter || !thickness) {
+        alert('Te rog completează toate câmpurile!');
+        return;
+    }
+
+    // Formula: I = (30...50) × d (pentru oțel carbon)
+    // Ajustare în funcție de material
+    let currentMin, currentMax, voltageMin, voltageMax, speedMin, speedMax;
+
+    switch (material) {
+        case 'steel':
+            currentMin = Math.round(35 * diameter);
+            currentMax = Math.round(45 * diameter);
+            voltageMin = 20;
+            voltageMax = 28;
+            speedMin = 12;
+            speedMax = 20;
+            break;
+        case 'stainless':
+            currentMin = Math.round(30 * diameter);
+            currentMax = Math.round(40 * diameter);
+            voltageMin = 18;
+            voltageMax = 25;
+            speedMin = 10;
+            speedMax = 18;
+            break;
+        case 'aluminum':
+            currentMin = Math.round(40 * diameter);
+            currentMax = Math.round(55 * diameter);
+            voltageMin = 22;
+            voltageMax = 30;
+            speedMin = 15;
+            speedMax = 25;
+            break;
+    }
+
+    // Ajustare pentru grosime tablă
+    if (thickness < 3) {
+        currentMin = Math.round(currentMin * 0.8);
+        currentMax = Math.round(currentMax * 0.9);
+    } else if (thickness > 10) {
+        currentMin = Math.round(currentMin * 1.1);
+        currentMax = Math.round(currentMax * 1.2);
+    }
+
+    // Afișare rezultate
+    document.getElementById('simulatorResults').style.display = 'block';
+    document.getElementById('currentResult').textContent = `${currentMin} - ${currentMax}`;
+    document.getElementById('voltageResult').textContent = `${voltageMin} - ${voltageMax}`;
+    document.getElementById('speedResult').textContent = `${speedMin} - ${speedMax}`;
+
+    // Note suplimentare
+    let notes = `<strong>Recomandări pentru ${material === 'steel' ? 'oțel carbon' : material === 'stainless' ? 'inox' : 'aluminiu'}:</strong><br>`;
+
+    if (diameter < 2.5) {
+        notes += '⚠️ Electrod subțire - atenție la penetrare.<br>';
+    }
+    if (thickness < diameter) {
+        notes += '💡 Grosime tablă mică - reduce curentul cu 10-15%.<br>';
+    }
+    if (thickness > 15) {
+        notes += '📌 Tablă groasă - necesită preîncălzire și multiple treceri.<br>';
+    }
+    notes += `✅ Electrod recomandat: Ø${diameter}mm pentru grosime ${thickness}mm.`;
+
+    document.getElementById('resultNotes').innerHTML = notes;
+
+    // Scroll to results
+    document.getElementById('simulatorResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ===============================
+// CERTIFICATE OF COMPLETION
+// ===============================
+function checkAndOfferCertificate() {
+    const stats = JSON.parse(localStorage.getItem('testStats') || '{}');
+
+    // Check if all tests passed with 80%
+    if (stats.desen && stats.sudura && stats.ssm && stats.final) {
+        if (stats.desen >= 80 && stats.sudura >= 80 && stats.ssm >= 80 && stats.final >= 80) {
+            // Show certificate offer
+            if (confirm('🎉 Felicitări! Ai completat toate testele cu peste 80%!\n\nVrei să generezi certificatul de finalizare?')) {
+                showCertificateModal();
+            }
+        }
+    }
+}
+
+function showCertificateModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.id = 'certificateModal';
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>🏆 Certificat de Finalizare</h2>
+                <button class="close-btn" onclick="closeCertificateModal()">×</button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div class="input-group">
+                    <label for="studentName" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Nume Elev:</label>
+                    <input type="text" id="studentName" class="calc-input" placeholder="Ex: Popescu Ion" style="width: 100%;">
+                </div>
+                <div class="input-group" style="margin-top: 1rem;">
+                    <label for="studentClass" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Clasa:</label>
+                    <input type="text" id="studentClass" class="calc-input" value="Clasa a X-a Ap" style="width: 100%;">
+                </div>
+                <button class="btn btn-primary" onclick="generateCertificate()" style="margin-top: 1.5rem; width: 100%;">
+                    📄 Generează Certificat PDF
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function closeCertificateModal() {
+    const modal = document.getElementById('certificateModal');
+    if (modal) modal.remove();
+}
+
+function generateCertificate() {
+    const studentName = document.getElementById('studentName').value.trim();
+    const studentClass = document.getElementById('studentClass').value.trim();
+
+    if (!studentName) {
+        alert('Te rog introdu numele elevului!');
+        return;
+    }
+
+    const stats = JSON.parse(localStorage.getItem('testStats') || '{}');
+    const average = Math.round((stats.desen + stats.sudura + stats.ssm + stats.final) / 4);
+    const today = new Date().toLocaleDateString('ro-RO');
+
+    // Create certificate HTML
+    const cert = document.createElement('div');
+    cert.style.position = 'fixed';
+    cert.style.left = '0';
+    cert.style.top = '0';
+    cert.style.width = '210mm';
+    cert.style.padding = '40px';
+    cert.style.background = 'white';
+    cert.style.fontFamily = 'Georgia, serif';
+    cert.style.opacity = '0';
+    cert.style.zIndex = '-1';
+
+    cert.innerHTML = `
+        <div style="border: 10px double #2563eb; padding: 40px; min-height: 250mm; text-align: center;">
+            <div style="border: 2px solid #3b82f6; padding: 30px;">
+                <h1 style="color: #1e40af; font-size: 2.5rem; margin-bottom: 10px;">CERTIFICAT</h1>
+                <h2 style="color: #64748b; font-size: 1.5rem; margin-bottom: 30px;">DE FINALIZARE</h2>
+                
+                <p style="font-size: 1.1rem; line-height: 2; margin: 30px 0;">
+                    Prin prezenta se certifică că elevul/eleva<br>
+                    <strong style="font-size: 1.5rem; color: #1e40af;">${studentName}</strong><br>
+                    din ${studentClass}<br><br>
+                    a finalizat cu succes modulul educațional<br>
+                    <strong style="font-size: 1.3rem; color: #dc2626;">„Aplicații de Bază în Prelucrările la Cald"</strong><br>
+                    în cadrul platformei educaționale interactive<br><br>
+                    <strong>Liceul Tehnologic "Aurel Vlaicu" Galați</strong>
+                </p>
+
+                <div style="margin: 40px 0; padding: 20px; background: #f8fafc; border-radius: 10px;">
+                    <h3 style="color: #1e40af; margin-bottom: 15px;">Rezultate</h3>
+                    <p style="line-height: 1.8;">
+                        Desen Tehnic: <strong>${stats.desen}%</strong><br>
+                        Îmbinări Sudate: <strong>${stats.sudura}%</strong><br>
+                        Protecția Muncii: <strong>${stats.ssm}%</strong><br>
+                        Test Final: <strong>${stats.final}%</strong><br><br>
+                        <span style="font-size: 1.3rem; color: #16a34a;">Medie Generală: ${average}%</span>
+                    </p>
+                </div>
+
+                <div style="margin-top: 50px; display: flex; justify-content: space-around; text-align: center;">
+                    <div>
+                        <p style="border-top: 2px solid #000; padding-top: 10px; margin-top: 60px; width: 200px;">
+                            <strong>Prof.Ing. Popescu Romulus</strong><br>
+                            <small>Coordonator Modul</small>
+                        </p>
+                    </div>
+                    <div>
+                        <p style="border-top: 2px solid #000; padding-top: 10px; margin-top: 60px; width: 200px;">
+                            <strong>Dir.Prof.Ing. Silviana Ciupercă</strong><br>
+                            <small>Director</small>
+                        </p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 40px; font-size: 0.9rem; color: #64748b;">
+                    Galați, ${today}
+                </p>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(cert);
+
+    // Generate PDF
+    const opt = {
+        margin: 5,
+        filename: `Certificat_${studentName.replace(/\s/g, '_')}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    setTimeout(() => {
+        html2pdf().set(opt).from(cert).save().then(() => {
+            document.body.removeChild(cert);
+            closeCertificateModal();
+            if (typeof showToast === 'function') {
+                showToast('✅ Certificat generat cu succes!', 'success');
+            } else {
+                alert('✅ Certificat generat cu succes!');
+            }
+        }).catch(err => {
+            console.error('Certificate error:', err);
+            document.body.removeChild(cert);
+            alert('Eroare la generarea certificatului.');
+        });
+    }, 200);
+}

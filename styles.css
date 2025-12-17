@@ -3513,6 +3513,128 @@ body.dark-mode .dropzone.correct {
     }
 }
 
+/* Welding Simulator */
+.simulator-container {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+body.dark-mode .simulator-container {
+    background: #1e293b;
+}
+
+.simulator-inputs h3,
+.simulator-results h3 {
+    margin: 0 0 1.5rem;
+    color: #1e40af;
+}
+
+body.dark-mode .simulator-inputs h3,
+body.dark-mode .simulator-results h3 {
+    color: #60a5fa;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+body.dark-mode .input-group label {
+    color: #e5e7eb;
+}
+
+.calc-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.calc-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+body.dark-mode .calc-input {
+    background: #0f172a;
+    border-color: #334155;
+    color: white;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.result-card {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    border: 2px solid #e2e8f0;
+}
+
+body.dark-mode .result-card {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+.result-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.result-value {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.result-label {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.result-notes {
+    padding: 1rem;
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+body.dark-mode .result-notes {
+    background: #78350f;
+    border-color: #fbbf24;
+    color: #fef3c7;
+}
+
+@media (max-width: 768px) {
+    .simulator-container {
+        grid-template-columns: 1fr;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Mobile Gamification */
 @media (max-width: 600px) {
     .xp-notification {
