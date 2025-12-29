@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://romulus75-romeo.github.io/prelucari-cald/sitemap.xml
+
+# Platformă educațională pentru Prelucrări la Cald
+# Liceul Tehnologic "Aurel Vlaicu" Galați
