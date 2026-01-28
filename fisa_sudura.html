@@ -164,10 +164,38 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
             z-index: 1000;
+            text-decoration: none;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 70px;
+            width: 40px;
+            height: 40px;
+            background: #2563eb;
+            /* Blue for print */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
 
         .close-btn:hover {
             background: #991b1b;
+            transform: scale(1.1);
+        }
+
+        .print-btn:hover {
+            background: #1d4ed8;
             transform: scale(1.1);
         }
 
@@ -177,7 +205,8 @@
                 padding: 15mm;
             }
 
-            .close-btn {
+            .close-btn,
+            .print-btn {
                 display: none;
             }
         }
@@ -186,7 +215,17 @@
 </head>
 
 <body>
-    <button class="close-btn" onclick="window.close()" title="Închide">&times;</button>
+    <button class="print-btn" onclick="window.print()" title="Printează/Descarcă">🖨️</button>
+    <button class="close-btn" onclick="closeWindow()" title="Închide">&times;</button>
+
+    <script>
+        function closeWindow() {
+            window.close();
+            setTimeout(() => {
+                window.location.href = 'index.html#fise-lucru';
+            }, 100);
+        }
+    </script>
 
     <h1>FIȘă DE LUCRU - PROCEDEE DE SUDARE</h1>
 
